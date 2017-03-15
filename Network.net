@@ -1,0 +1,65 @@
+// === main logic circuit ===================================================== //
+gene_Trigger activates (gene_IRF1,gene_AhR,gene_CEBPa,gene_PU1,gene_EGR1,gene_PPARg)
+
+// AhR -
+gene_AhR activates (gene_IRF1,gene_AP1)
+gene_AhR inhibits gene_PU1
+
+// PPARg -
+gene_PPARg activates (gene_OCT1,gene_IRF1,gene_CEBPa)
+gene_PPARg inhibits (gene_AP1,gene_EGR1)
+
+// CEBPa -
+gene_CEBPa activates (gene_CEBPa,gene_GFI1,gene_PPARg,gene_PU1)
+
+// GFI1
+gene_GFI1 inhibits (gene_EGR1,gene_CEBPa,gene_PU1)
+
+// EGR1 -
+gene_EGR1 activates gene_PPARg
+gene_EGR1 inhibits gene_GFI1
+
+// PU1 -
+gene_PU1 activates (gene_EGR1,gene_AP1,gene_PU1)
+gene_PU1 inhibits gene_PPARg
+
+// AP1 -
+gene_AP1 activates gene_PU1
+gene_AP1 inhibits gene_PPARg
+
+// OCT1-
+gene_OCT1 activates gene_PU1
+// ============================================================================ //
+//
+// === output circuit ========================================================= //
+
+// CD38 -
+(gene_IRF1,gene_PPARg,gene_Trigger,gene_cRAF) activates gene_CD38
+
+// CD11b -
+(gene_PU1,gene_cRAF) activates gene_CD11b
+
+// CD14 -
+(gene_PPARg,gene_CEBPa,gene_EGR1,gene_cRAF) activates gene_CD14
+
+
+// OCT4 -
+gene_Trigger inhibits gene_OCT4
+gene_AhR inhibits gene_OCT4
+gene_cRAF inhibits gene_OCT4
+
+// P47Phox -
+(gene_PU1,gene_CEBPa,gene_cRAF) activates gene_P47Phox
+gene_PPARg inhibits gene_P47Phox
+
+// E2F -
+gene_E2F activates gene_E2F
+gene_PPARg inhibits gene_E2F
+gene_CEBPa inhibits gene_E2F
+gene_GFI1 inhibits gene_E2F
+gene_cRAF inhibits gene_E2F
+
+// P21 -
+(gene_Trigger,gene_AP1,gene_PPARg,gene_PU1,gene_IRF1,gene_CEBPa,gene_cRAF) activates gene_P21
+gene_GFI1 inhibits gene_P21
+// ============================================================================ //
