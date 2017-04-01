@@ -145,7 +145,7 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 
 	# kcats for transcription and translation -
 	kcat_transcription = max_transcription_rate*(3600/average_transcript_length)      # hr^-1
-	kcat_translation = max_translation_rate*(3600/average_protein_length)             # hr^-1
+	kcat_translation = 4.0*max_translation_rate*(3600/average_protein_length)             # hr^-1
 
 	# Maximum specific growth rate -
 	maximum_specific_growth_rate = (1/doubling_time_cell)*log(2)                      # hr^-1
@@ -158,7 +158,7 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 
 	# Saturation constants for translation and trascription -
 	saturation_transcription = 4600*(1/av_number)*(1/V)*1e9                           # nM
-	saturation_translation = 100000*(1/av_number)*(1/V)*1e9                           # nM
+	saturation_translation = 90000*(1/av_number)*(1/V)*1e9                           # nM
 	# -------------------------------------------------------------------------------------------#
 
 	# initial condition array -
@@ -217,6 +217,7 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 		0.0	;	# 50	protein_gene_P47Phox
 		0.0	;	# 51	protein_gene_PPARg
 		0.0	;	# 52	protein_gene_PU1
+
 		0.0	;	# 53	protein_gene_Trigger
 		0.0	;	# 54	protein_gene_cRAF
 	]
@@ -551,16 +552,18 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 		"W_gene_Trigger_RNAP"	;	# 152
 		"W_gene_cRAF_RNAP"	;	# 153
 
-		"rnapII_concentration"	;	# 154
-		"ribosome_concentration"	;	# 155
-		"degradation_constant_mRNA"	;	# 156
-		"degradation_constant_protein"	;	# 157
-		"kcat_transcription"	;	# 158
-		"kcat_translation"	;	# 159
-		"maximum_specific_growth_rate"	;	# 160
-		"saturation_constant_transcription"	;	# 161
-		"saturation_constant_translation"	;	# 162
+		# "rnapII_concentration"	;	# 154
+		# "ribosome_concentration"	;	# 155
+		# "degradation_constant_mRNA"	;	# 156
+		# "degradation_constant_protein"	;	# 157
+		# "kcat_transcription"	;	# 158
+		# "kcat_translation"	;	# 159
+		# "maximum_specific_growth_rate"	;	# 160
+		# "saturation_constant_transcription"	;	# 161
+		# "saturation_constant_translation"	;	# 162
 	]
+
+
 
 	# Background copy number - (added by JV)
 	background_copy_number_dictionary = Dict{AbstractString,Float64}()
@@ -616,6 +619,26 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 	data_dictionary["background_copy_number_dictionary"] = background_copy_number_dictionary;
 	data_dictionary["cell_volume"] = V;
 	data_dictionary["av_number"] = av_number;
+
+	# add the beta's
+	# data_dictionary["beta_mRNA_gene_AP1"] = 1.0					;	# 1 163
+	# data_dictionary["beta_mRNA_gene_AhR"] = 1.0					; # 2 164
+	# data_dictionary["beta_mRNA_gene_CD11b"] = 1.0				; # 3 165
+	# data_dictionary["beta_mRNA_gene_CD14"] = 1.0				;	# 4 166
+	# data_dictionary["beta_mRNA_gene_CD38"] = 1.0				; # 5 167
+	# data_dictionary["beta_mRNA_gene_CEBPa"] = 1.0				; # 6 168
+	# data_dictionary["beta_mRNA_gene_E2F"] = 1.0					; # 7 169
+	# data_dictionary["beta_mRNA_gene_EGR1"] = 1.0				; # 8 170
+	# data_dictionary["beta_mRNA_gene_GFI1"] = 1.0				; # 9 171
+	# data_dictionary["beta_mRNA_gene_IRF1"] = 1.0				;	# 10 172
+	# data_dictionary["beta_mRNA_gene_OCT1"] = 1.0				;	# 11 173
+	# data_dictionary["beta_mRNA_gene_OCT4"] = 1.0				;	# 12 174
+	# data_dictionary["beta_mRNA_gene_P21"] = 1.0					;	# 13 175
+	# data_dictionary["beta_mRNA_gene_P47Phox"] = 1.0			;	# 14 176
+	# data_dictionary["beta_mRNA_gene_PPARg"] = 1.0				;	# 15 177
+	# data_dictionary["beta_mRNA_gene_PU1"] = 1.0					;	# 16 178
+	# data_dictionary["beta_mRNA_gene_Trigger"] = 1.0			;	# 17 179
+	# data_dictionary["beta_mRNA_gene_cRAF"] = 1.0				;	# 18 180
 	# =============================== DO NOT EDIT ABOVE THIS LINE ============================== #
 	return data_dictionary
 end

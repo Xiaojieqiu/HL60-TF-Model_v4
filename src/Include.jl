@@ -36,9 +36,8 @@ using ODE
 using Search
 using JSON
 include("Simulation.jl")
-include("./search_functions/ErrorLib.jl")
-include("./search_functions/SearchFunctionLib.jl")
-
+include("./search_functions/Error.jl")
+include("./search_functions/AdvancedSearchLib.jl")
 
 # We use python interpolation -
 using PyCall

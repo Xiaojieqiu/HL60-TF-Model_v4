@@ -28,16 +28,16 @@
 # Generated on: 2017-03-09T06:52:55.843
 #
 # Input arguments:
-# t::Float64 => Current time value (scalar) 
-# x::Array{Float64,1} => State array (number_of_species x 1) 
-# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+# t::Float64 => Current time value (scalar)
+# x::Array{Float64,1} => State array (number_of_species x 1)
+# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 #
 # Output arguments:
-# transcription_rate_array::Array{Float64,1} => Transcriptional rate array (number_of_genes x 1) at time t 
+# transcription_rate_array::Array{Float64,1} => Transcriptional rate array (number_of_genes x 1) at time t
 # ----------------------------------------------------------------------------------- #
 function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractString,Any})
 
-	# Alias the species - 
+	# Alias the species -
 	gene_AP1 = x[1]
 	gene_AhR = x[2]
 	gene_CD11b = x[3]
@@ -57,7 +57,7 @@ function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dicti
 	gene_Trigger = x[17]
 	gene_cRAF = x[18]
 
-	# Initialize the transcription rate - 
+	# Initialize the transcription rate -
 	transcription_rate_array = zeros(18)
 	KSAT = data_dictionary["saturation_constant_transcription"]
 	kcat_transcription = data_dictionary["kcat_transcription"]
@@ -65,7 +65,7 @@ function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dicti
 	average_transcript_length = data_dictionary["average_transcript_length"]
 	gene_coding_length_array = data_dictionary["gene_coding_length_array"]
 
-	# Populate the transcription rate array - 
+	# Populate the transcription rate array -
 	# Gene: gene_AP1
 	gene_length = gene_coding_length_array[1]
 	scale_factor = (average_transcript_length/gene_length)
@@ -157,7 +157,7 @@ function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dicti
 	transcription_rate_array[18] = scale_factor*kcat_transcription*(rnapII_concentration)*((gene_cRAF)/(KSAT+gene_cRAF))
 
 
-	# return transcription_rate_array - 
+	# return transcription_rate_array -
 	return transcription_rate_array
 end
 
@@ -167,12 +167,12 @@ end
 # Generated on: 2017-03-09T06:52:55.843
 #
 # Input arguments:
-# t::Float64 => Current time value (scalar) 
-# x::Array{Float64,1} => State array (number_of_species x 1) 
-# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+# t::Float64 => Current time value (scalar)
+# x::Array{Float64,1} => State array (number_of_species x 1)
+# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 #
 # Output arguments:
-# background_transcription_rate_array::Array{Float64,1} => Background transcriptional rate array (number_of_genes x 1) at time t 
+# background_transcription_rate_array::Array{Float64,1} => Background transcriptional rate array (number_of_genes x 1) at time t
 # ----------------------------------------------------------------------------------- #
 function calculate_background_transcription_rates(t::Float64,x::Array{Float64,1},transcription_rate_array::Array{Float64,1},data_dictionary::Dict{AbstractString,Any})
 	return zeros(length(x))
@@ -185,16 +185,16 @@ end
 # Generated on: 2017-03-09T06:52:55.843
 #
 # Input arguments:
-# t::Float64 => Current time value (scalar) 
-# x::Array{Float64,1} => State array (number_of_species x 1) 
-# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+# t::Float64 => Current time value (scalar)
+# x::Array{Float64,1} => State array (number_of_species x 1)
+# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 #
 # Output arguments:
-# translation_rate_array::Array{Float64,1} => Translation rate array (number_of_genes x 1) at time t 
+# translation_rate_array::Array{Float64,1} => Translation rate array (number_of_genes x 1) at time t
 # ----------------------------------------------------------------------------------- #
 function calculate_translation_rates(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractString,Any})
 
-	# Alias the species - 
+	# Alias the species -
 	mRNA_gene_AP1 = x[19]
 	mRNA_gene_AhR = x[20]
 	mRNA_gene_CD11b = x[21]
@@ -214,7 +214,7 @@ function calculate_translation_rates(t::Float64,x::Array{Float64,1},data_diction
 	mRNA_gene_Trigger = x[35]
 	mRNA_gene_cRAF = x[36]
 
-	# Initialize the translation rate - 
+	# Initialize the translation rate -
 	translation_rate_array = zeros(18)
 	KSAT = data_dictionary["saturation_constant_translation"]
 	kcat_translation = data_dictionary["kcat_translation"]
@@ -222,7 +222,7 @@ function calculate_translation_rates(t::Float64,x::Array{Float64,1},data_diction
 	average_protein_length = data_dictionary["average_protein_length"]
 	protein_coding_length_array = data_dictionary["protein_coding_length_array"]
 
-	# Populate the translation rate array - 
+	# Populate the translation rate array -
 	# Transcript: mRNA_gene_AP1
 	protein_length = protein_coding_length_array[1]
 	scale_factor = (average_protein_length/protein_length)
@@ -314,7 +314,7 @@ function calculate_translation_rates(t::Float64,x::Array{Float64,1},data_diction
 	translation_rate_array[18] = scale_factor*kcat_translation*(ribosome_concentration)*((mRNA_gene_cRAF)/(KSAT+mRNA_gene_cRAF))
 
 
-	# return translation array - 
+	# return translation array -
 	return translation_rate_array
 end
 
@@ -324,16 +324,16 @@ end
 # Generated on: 2017-03-09T06:52:55.845
 #
 # Input arguments:
-# t::Float64 => Current time value (scalar) 
-# x::Array{Float64,1} => State array (number_of_species x 1) 
-# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+# t::Float64 => Current time value (scalar)
+# x::Array{Float64,1} => State array (number_of_species x 1)
+# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 #
 # Output arguments:
-# mRNA_degradation_rate_array::Array{Float64,1} => mRNA degradation rate array (number_of_genes x 1) at time t 
+# mRNA_degradation_rate_array::Array{Float64,1} => mRNA degradation rate array (number_of_genes x 1) at time t
 # ----------------------------------------------------------------------------------- #
 function calculate_mRNA_degradation_rates(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractString,Any})
 
-	# Alias the species - 
+	# Alias the species -
 	mRNA_gene_AP1 = x[19]
 	mRNA_gene_AhR = x[20]
 	mRNA_gene_CD11b = x[21]
@@ -353,11 +353,31 @@ function calculate_mRNA_degradation_rates(t::Float64,x::Array{Float64,1},data_di
 	mRNA_gene_Trigger = x[35]
 	mRNA_gene_cRAF = x[36]
 
-	# Initialize the degrdation array - 
+	# Initialize the degrdation array -
 	degradation_rate_array = zeros(18)
 	mRNA_degrdation_constant = data_dictionary["degradation_constant_mRNA"]
 
-	# Calculate the degradation_rate_array - 
+	# get my corrections -
+	# beta_mRNA_gene_AP1 = data_dictionary["beta_mRNA_gene_AP1"]
+	# beta_mRNA_gene_AhR = data_dictionary["beta_mRNA_gene_AhR"]
+	# beta_mRNA_gene_CD11b = data_dictionary["beta_mRNA_gene_CD11b"]
+	# beta_mRNA_gene_CD14 = data_dictionary["beta_mRNA_gene_CD14"]
+	# beta_mRNA_gene_CD38 = data_dictionary["beta_mRNA_gene_CD38"]
+	# beta_mRNA_gene_CEBPa = data_dictionary["beta_mRNA_gene_CEBPa"]
+	# beta_mRNA_gene_E2F = data_dictionary["beta_mRNA_gene_E2F"]
+	# beta_mRNA_gene_EGR1 = data_dictionary["beta_mRNA_gene_EGR1"]
+	# beta_mRNA_gene_GFI1 = data_dictionary["beta_mRNA_gene_GFI1"]
+	# beta_mRNA_gene_IRF1 = data_dictionary["beta_mRNA_gene_IRF1"]
+	# beta_mRNA_gene_OCT1 = data_dictionary["beta_mRNA_gene_OCT1"]
+	# beta_mRNA_gene_OCT4 = data_dictionary["beta_mRNA_gene_OCT4"]
+	# beta_mRNA_gene_P21 = data_dictionary["beta_mRNA_gene_P21"]
+	# beta_mRNA_gene_P47Phox = data_dictionary["beta_mRNA_gene_P47Phox"]
+	# beta_mRNA_gene_PPARg = data_dictionary["beta_mRNA_gene_PPARg"]
+	# beta_mRNA_gene_PU1 = data_dictionary["beta_mRNA_gene_PU1"]
+	# beta_mRNA_gene_Trigger = data_dictionary["beta_mRNA_gene_Trigger"]
+	# beta_mRNA_gene_cRAF = data_dictionary["beta_mRNA_gene_cRAF"]
+
+	# Calculate the degradation_rate_array -
 	degradation_rate_array[1] = (mRNA_degrdation_constant)*mRNA_gene_AP1
 	degradation_rate_array[2] = (mRNA_degrdation_constant)*mRNA_gene_AhR
 	degradation_rate_array[3] = (mRNA_degrdation_constant)*mRNA_gene_CD11b
@@ -377,7 +397,7 @@ function calculate_mRNA_degradation_rates(t::Float64,x::Array{Float64,1},data_di
 	degradation_rate_array[17] = (mRNA_degrdation_constant)*mRNA_gene_Trigger
 	degradation_rate_array[18] = (mRNA_degrdation_constant)*mRNA_gene_cRAF
 
-	# return the degrdation rate array - 
+	# return the degrdation rate array -
 	return degradation_rate_array
 end
 
@@ -387,16 +407,16 @@ end
 # Generated on: 2017-03-09T06:52:55.847
 #
 # Input arguments:
-# t::Float64 => Current time value (scalar) 
-# x::Array{Float64,1} => State array (number_of_species x 1) 
-# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+# t::Float64 => Current time value (scalar)
+# x::Array{Float64,1} => State array (number_of_species x 1)
+# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 #
 # Output arguments:
-# protein_degradation_rate_array::Array{Float64,1} => protein degradation rate array (number_of_proteins x 1) at time t 
+# protein_degradation_rate_array::Array{Float64,1} => protein degradation rate array (number_of_proteins x 1) at time t
 # ----------------------------------------------------------------------------------- #
 function calculate_protein_degradation_rates(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractString,Any})
 
-	# Alias the species - 
+	# Alias the species -
 	protein_gene_AP1 = x[37]
 	protein_gene_AhR = x[38]
 	protein_gene_CD11b = x[39]
@@ -416,11 +436,11 @@ function calculate_protein_degradation_rates(t::Float64,x::Array{Float64,1},data
 	protein_gene_Trigger = x[53]
 	protein_gene_cRAF = x[54]
 
-	# Initialize the degrdation array - 
+	# Initialize the degrdation array -
 	degradation_rate_array = zeros(18)
 	protein_degrdation_constant = data_dictionary["degradation_constant_protein"]
 
-	# Calculate the degradation_rate_array - 
+	# Calculate the degradation_rate_array -
 	degradation_rate_array[1] = (protein_degrdation_constant)*protein_gene_AP1
 	degradation_rate_array[2] = (protein_degrdation_constant)*protein_gene_AhR
 	degradation_rate_array[3] = (protein_degrdation_constant)*protein_gene_CD11b
@@ -440,8 +460,6 @@ function calculate_protein_degradation_rates(t::Float64,x::Array{Float64,1},data
 	degradation_rate_array[17] = (protein_degrdation_constant)*protein_gene_Trigger
 	degradation_rate_array[18] = (protein_degrdation_constant)*protein_gene_cRAF
 
-	# return the degrdation rate array - 
+	# return the degrdation rate array -
 	return degradation_rate_array
 end
-
-

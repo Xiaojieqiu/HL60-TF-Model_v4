@@ -94,6 +94,7 @@ function objective_function(parameter_guess::Array{Float64,1})
     obj_array[experiment_index] = error_value;
   end
 
+  # scaling ?
   return sum(obj_array)
 end
 
@@ -312,8 +313,8 @@ function constraints_function(parameter_guess::Array{Float64,1})
 		0 100 ; # "W_gene_PU1_gene_OCT1"	;	# 149
 		0 100 ; # "W_gene_PU1_gene_AhR"	;	# 150
 		0 100 ; # "W_gene_PU1_gene_GFI1"	;	# 151
-		0 100 ; # "W_gene_Trigger_RNAP"	;	# 152
-		0 100 ; # "W_gene_cRAF_RNAP"	;	# 153
+		0 0 ; # "W_gene_Trigger_RNAP"	;	# 152
+		0 0 ; # "W_gene_cRAF_RNAP"	;	# 153
 
     # global parameters -
 		rnapII_concentration*0.99 rnapII_concentration*1.01 ;                 # "rnapII_concentration"	;	# 154

@@ -71,13 +71,6 @@
       "error_function":"Error"
     },
     {
-      "experiment_id":"54fb6c87-f489-40d3-a7aa-5efd52a15fd5",
-      "data_file":"./search_functions/data/CD14-WTHL60.txt",
-      "output_index":"40",
-      "protein_symbol":"protein_gene_CD14",
-      "error_function":"Error"
-    },
-    {
       "experiment_id":"49fe56d5-5bc5-49fb-9995-8e2f3195428d",
       "data_file":"./search_functions/data/AhR-WTHL60.txt",
       "output_index":"38",

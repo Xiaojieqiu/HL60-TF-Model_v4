@@ -30,14 +30,14 @@ data_dictionary = DataDictionary(time_start,time_stop,time_step_size)
 # end
 
 # get my initial parameter guess from the previous run -
-obj_array = readdlm("objective_archive.dat.3")
-par_array = readdlm("parameter_archive.dat.3")
+obj_array = readdlm("objective_archive.dat.8")
+par_array = readdlm("parameter_archive.dat.8")
 min_index = indmin(obj_array)
 initial_parameter_guess = par_array[:,min_index]
 
 # Search exposes the *run loop* method -
 (objective_archive,parameter_archive) = estimate_model_parameters(objective_function,generation_function,acceptance_function,constraints_function,
-  initial_parameter_guess; maximum_number_of_iterations=200,show_trace=true)
+  initial_parameter_guess; maximum_number_of_iterations=1000,show_trace=true)
 
 # convert wrapper to actual array -
 number_of_parameters = length(initial_parameter_guess)
@@ -50,5 +50,5 @@ end
 parameter_array = parameter_array[:,2:end]
 
 # write results to disk -
-writedlm("objective_archive.dat.4",objective_archive)
-writedlm("parameter_archive.dat.4",parameter_array)
+writedlm("objective_archive.dat.9",objective_archive)
+writedlm("parameter_archive.dat.9",parameter_array)

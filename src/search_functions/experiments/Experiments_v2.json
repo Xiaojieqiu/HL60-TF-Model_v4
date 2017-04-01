@@ -1,0 +1,11 @@
+{
+  "experiment_array":[
+    {
+      "experiment_id":"5033f332-4394-11e6-beb8-9e71128cae77",
+      "data_file":"./search_functions/data/PU1-WTHL60.txt",
+      "output_index":"52",
+      "protein_symbol":"protein_gene_PU1",
+      "error_function":"Error"
+    }
+  ]
+}
