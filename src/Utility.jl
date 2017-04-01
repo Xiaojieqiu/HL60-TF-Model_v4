@@ -24,7 +24,7 @@
 
 function generate_initial_paremeter_guess(data_dictionary)
 
-  
+
 
 end
 
@@ -354,10 +354,14 @@ function calculate_jacobian(time,state_array,data_dictionary)
 
   # calculate each row of the jacobian -
   jacobian_array = zeros(1,number_of_states)
-  for (state_index,state_value) in enumerate(state_array)
+  state_index = 1
+  for state_value in state_array
 
     jacobian_row = calculate_jacobian_row(time,state_array,state_index,data_dictionary)
     jacobian_array = [jacobian_array  ; transpose(jacobian_row)]
+
+    # update the state index -
+    state_index = state_index + 1
   end
 
   jacobian_array = jacobian_array[2:end,:]
@@ -373,10 +377,14 @@ function calculate_bmatrix(time,state_array,data_dictionary)
 
   # calculate each row of the jacobian -
   b_array = zeros(number_of_parameters,1)
-  for (state_index,state_value) in enumerate(state_array)
+  state_index = 1
+  for state_value in state_array
 
     bmatrtix_row = calculate_bmatrix_row(time,state_array,state_index,data_dictionary)
     b_array = [b_array bmatrtix_row]
+
+    # update the state index -
+    state_index = state_index + 1
   end
 
   b_array = b_array[:,2:end]
@@ -405,15 +413,13 @@ function calculate_bmatrix_row(time,state_array,balance_index,data_dictionary)
 
   # create delta parameter array -
   parameter_delta_array = Float64[]
-  for (parameter_index,parameter_name) in enumerate(parameter_name_mapping_array)
+  for parameter_name in parameter_name_mapping_array
 
     # Grab the default value -
     default_parameter_value = total_parameter_dictionary[parameter_name]
 
     # state perturbation -
     peturbed_parameter_value = default_parameter_value*(delta);
-
-    #@show (peturbed_parameter_value,default_parameter_value)
 
     # check -
     if (peturbed_parameter_value<epsilon)
@@ -432,7 +438,8 @@ function calculate_bmatrix_row(time,state_array,balance_index,data_dictionary)
 
   # estimate the perturbed balances -
   rhs_delta_array = Float64[]
-  for (parameter_index,parameter_name) in enumerate(parameter_name_mapping_array)
+  parameter_index = 1
+  for parameter_name in parameter_name_mapping_array
 
     # copy -
     local_data_dictionary = deepcopy(data_dictionary)
@@ -470,6 +477,9 @@ function calculate_bmatrix_row(time,state_array,balance_index,data_dictionary)
 
     # capture -
     push!(rhs_delta_array,f_perturbed)
+
+    # update -
+    parameter_index = parameter_index + 1
   end
 
   # calculate the bmatrix row -
@@ -533,7 +543,7 @@ function calculate_jacobian_row(time,state_array,balance_index,data_dictionary)
 
   # Create the delta state array -
   state_delta_array = Float64[]
-  for (state_index,state_value) in enumerate(state_array)
+  for state_value in state_array
 
     # state perturbation -
     peturbed_state = state_value*(delta);
@@ -555,7 +565,8 @@ function calculate_jacobian_row(time,state_array,balance_index,data_dictionary)
 
   # estimate the perturbed balances -
   rhs_delta_array = Float64[]
-  for (state_index,state_value) in enumerate(state_array)
+  state_index = 1
+  for state_value in state_array
 
     # update the state -
     perturbed_state_array = zeros(number_of_states)
@@ -575,6 +586,9 @@ function calculate_jacobian_row(time,state_array,balance_index,data_dictionary)
 
     # capture -
     push!(rhs_delta_array,f_perturbed_delta)
+
+    # update -
+    state_index = state_index + 1
   end
 
   # calculate the jacobian row -

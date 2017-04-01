@@ -73,6 +73,13 @@ function objective_function(parameter_guess::Array{Float64,1})
   # (run the model to SS, and then set the ICs to the SS for this parameter set)
   (time_array,simulation_state_array) = add_atra_simulation(time_start,time_stop,time_step_size,data_dictionary);
 
+  wght_array = ones(13)
+  wght_array[4] = 5.4 # PU1
+  wght_array[5] = 5.2 # P47
+  wght_array[9] = 2.84 # IRF1
+  wght_array[10] = 2.43 # EGR1
+
+
   # Call the error functions -
   # loop through the experimental dictionary, and call the appropriate error function -
   for (experiment_index,experiment_dictionary) in enumerate(experiment_array)
@@ -91,8 +98,10 @@ function objective_function(parameter_guess::Array{Float64,1})
     error_value = error_function(experimental_data_array,time_array,simulation_state_array,output_index,species_symbol,data_dictionary)
 
     # Add the error to the objective array -
-    obj_array[experiment_index] = error_value;
+    obj_array[experiment_index] = wght_array[experiment_index]*error_value;
   end
+
+
 
 
   return sum(obj_array)
@@ -409,10 +418,10 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
 
       # Write parameters to disk ...
       parameter_archive = [parameter_archive parameter_array]
-      writedlm("./parameter_archive.dat.2",parameter_archive);
+      writedlm("./parameter_archive.dat.4",parameter_archive);
 
       error_archive = [error_archive error_array[1]]
-      writedlm("./error_archive.dat.2",error_archive);
+      writedlm("./error_archive.dat.4",error_archive);
 
       # reset the number of failed steps -
       number_of_failed_steps = 0;

@@ -51,7 +51,7 @@ function SolveAdjBalances(TSTART,TSTOP,Ts,parameter_index,data_dictionary)
 
   # Call the ODE solver -
   fbalances(t,y) = AdjBalances(t,y,parameter_index,data_dictionary);
-  (t,y) = ode45(fbalances,initial_condition_vector,TSIM;points=:specified,minstep=0.0001*epsilon);
+  (t,y) = ode45(fbalances,initial_condition_vector,TSIM,reltol=1e-2,abstol=1e-4);
 
   # Map -
   number_of_timesteps = length(t)

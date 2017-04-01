@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 # ----------------------------------------------------------------------------------- #
-
+update_counter = 1
 # ----------------------------------------------------------------------------------- #
 # AdjBalances: Evaluates adjoint model equations given time, state, parameter_index,
 # and the data_dictionary.
@@ -40,6 +40,8 @@
 # ----------------------------------------------------------------------------------- #
 function AdjBalances(t,x,parameter_index,data_dictionary)
 
+  @show t
+
   # look up the number of states -
   number_of_states = data_dictionary["number_of_states"]
 
@@ -50,17 +52,14 @@ function AdjBalances(t,x,parameter_index,data_dictionary)
   # call -
   dxdt_array = Balances(t,state_array,data_dictionary)
 
-  # Calculate the sensitivity states -
   local_data_dictionary = deepcopy(data_dictionary)
   JM = calculate_jacobian(t,state_array,local_data_dictionary)
   BM = calculate_bmatrix(t,state_array,local_data_dictionary)
 
   # calulate the sensitivity state -
   dsdt_array = JM*sensitivity_array+BM[:,parameter_index]
-  r_array = [dxdt_array ; dsdt_array]
-
-  # return -
-  return r_array
+  total_array = [dxdt_array ; dsdt_array]
+  return total_array
 end
 
 

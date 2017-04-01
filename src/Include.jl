@@ -31,6 +31,7 @@ include("SolveBalances.jl")
 include("Balances.jl")
 include("Utility.jl")
 using ODE
+using Sundials
 
 # List any custom includes here ...
 using Search

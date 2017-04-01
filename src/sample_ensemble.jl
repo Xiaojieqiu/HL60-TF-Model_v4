@@ -10,8 +10,8 @@ time_step_size = 0.01
 data_dictionary = DataDictionary(time_start,time_stop,time_step_size)
 
 # get my initial parameter guess from the previous run -
-obj_array = readdlm("error_archive.dat.1")
-par_array = readdlm("parameter_archive.dat.1")
+obj_array = readdlm("error_archive.dat.4")
+par_array = readdlm("parameter_archive.dat.4")
 obj_array = obj_array[2:end]
 par_array = par_array[:,2:end]
 
