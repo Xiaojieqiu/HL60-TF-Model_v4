@@ -37,6 +37,7 @@ using Sundials
 using Search
 using JSON
 include("Simulation.jl")
+include("Robustness.jl")
 include("./search_functions/Error.jl")
 include("./search_functions/AdvancedSearchLib.jl")
 
