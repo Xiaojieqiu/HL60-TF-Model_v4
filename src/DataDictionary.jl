@@ -166,7 +166,9 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 		avg_gene_concentration	;	# 1	gene_AP1
 		avg_gene_concentration	;	# 2	gene_AhR
 		avg_gene_concentration	;	# 3	gene_CD11b
-		avg_gene_concentration	;	# 4	gene_CD14
+
+		0.0	;	# 4	gene_CD14
+
 		avg_gene_concentration	;	# 5	gene_CD38
 		avg_gene_concentration	;	# 6	gene_CEBPa
 		avg_gene_concentration	;	# 7	gene_E2F

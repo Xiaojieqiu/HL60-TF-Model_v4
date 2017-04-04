@@ -610,6 +610,7 @@ function estimate_steady_state(epsilon,data_dictionary)
   Ts = 1.0;
   TSTOP = 1000;
   did_reach_steady_state = false
+  iteration_counter = 1
   while (!did_reach_steady_state)
 
     # solve the balances -
@@ -636,12 +637,20 @@ function estimate_steady_state(epsilon,data_dictionary)
 
       # No, we did *not* reach steady state ....
       TSTART = TSTOP+Ts
-      TSTOP = 1.0 + TSTART;
-      Ts = 0.1;
+      TSTOP = 200.0 + TSTART;
+      Ts = 1.0;
 
       initial_condition_array = vec(X2[end,:])
       data_dictionary["initial_condition_array"] = initial_condition_array;
     end
+
+    if (iteration_counter>15)
+      did_reach_steady_state = true
+      return (vec(X2[end,:]));
+    else
+      iteration_counter = iteration_counter + 1
+    end
+
   end
 
   # return

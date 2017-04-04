@@ -3,7 +3,7 @@ include("Include.jl")
 
 # Setup the simulation timescale -
 time_start = 0.0
-time_stop = 120.0
+time_stop = 48.0
 time_step_size = 0.01
 
 # Load the data dictionary -
@@ -15,10 +15,10 @@ par_array = readdlm("parameter_archive.dat.4")
 obj_array = obj_array[2:end]
 par_array = par_array[:,2:end]
 
-# what sort by error -
+# sort by error -
 index_sort_error = sortperm(obj_array)
 
-# Which obj values are *less than or equal* to the median error?
+# Take the top 10 -
 index_of_good_sets = index_sort_error[1:10]
 
 # how many ensemble members do we have?
@@ -55,22 +55,25 @@ for outer_sample_index = 1:number_of_samples
     end
   end
 
+  pairwise_ko_array = zeros(16,16)
   gene_i_index_array = collect(1:1:16)
   gene_j_index_array = collect(1:1:16)
   for gene_i_index in gene_i_index_array
     for gene_j_index in gene_j_index_array
 
       # run the simulation -
-      (time_array,simulation_state_array) = simulate_pairwise_gene_knockout(time_start,time_stop,time_step_size,gene_i_index,gene_j_index,copy_data_dictionary);
+      distance = simulate_pairwise_gene_knockout(time_start,time_stop,time_step_size,gene_i_index,gene_j_index,copy_data_dictionary);
 
-      # dump data to disk -
-      local_data = [time_array simulation_state_array];
-      data_filename = "./pairwise_gene_ko/sim_data_EI_"*string(sample_index)*"_LI_"*string(outer_sample_index)*"_G1_"*string(gene_i_index)*"_G2_"*string(gene_j_index)*".dat"
-      writedlm(data_filename,local_data);
+      # grab -
+      pairwise_ko_array[gene_i_index,gene_j_index] = distance
 
       message_string = "Completed $(outer_sample_index) of $(number_of_samples) for (Gi,Gj) = ($(gene_i_index),$(gene_j_index))"
       println(message_string)
 
     end
   end
+
+  # dump data to disk -
+  data_filename = "./pairwise_gene_ko/delta_data_EI_"*string(sample_index)*"_LI_"*string(outer_sample_index)*".dat"
+  writedlm(data_filename,pairwise_ko_array);
 end

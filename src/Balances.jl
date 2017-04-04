@@ -78,6 +78,8 @@ end
 # ----------------------------------------------------------------------------------- #
 function Balances(t,x,data_dictionary)
 
+  # @show t
+
   # correct for negatives -
   idx_small = find(x.<0)
   x[idx_small] = 0.0
