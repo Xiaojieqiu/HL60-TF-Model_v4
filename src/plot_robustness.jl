@@ -3,22 +3,28 @@ using PyCall
 @pyimport matplotlib.patches as patches
 
 # what are my colors?
-color_1 = (1/255)*[64,64,64]
+# color_1 = (1/255)*[64,64,64] # dark gray -
+# color_1 = (1/255)*[255,99,71] # tomato
+color_1 = (1/255)*[0,191,255] # skyblue
 color_2 = (1/255)*[224,224,224]
 K = 0.45
 
 # load data array -
-raw_data_array = readdlm("./pairwise_gene_ko/delta_data_EI_124_LI_1.dat")
+raw_data_array = readdlm("./pairwise_connection_ko/delta_data_EI_124_LI_1.dat")
+(U,S,V) = svd(raw_data_array)
 
-# remove the "outer" data -
-raw_data_array = raw_data_array[2:end-1,2:end-1]
+# # remove the "outer" data -
+# raw_data_array = raw_data_array[2:end-1,2:end-1]
+#
+# # scale -
+# scale_factor = maximum(raw_data_array)
+# raw_data_array = (1.0/scale_factor)*raw_data_array
 
-# scale -
-scale_factor = maximum(raw_data_array)
-raw_data_array = (1/scale_factor)*raw_data_array
+# plot the U -
+scaled_data_array = abs(U)
 
 # what is the size of the data array?
-(number_of_rows,number_of_cols) = size(raw_data_array)
+(number_of_rows,number_of_cols) = size(scaled_data_array)
 
 # add an extra col for colorbar -
 colorbar_col = vec(transpose(linspace(0,1,number_of_rows)))
@@ -26,7 +32,9 @@ colorbar_col = vec(transpose(linspace(0,1,number_of_rows)))
 # main drawing loop -
 for col_index = 1:number_of_cols
 
-  data_scaled = raw_data_array[:,col_index]
+  data_scaled = scaled_data_array[:,col_index]
+
+  @show data_scaled
 
   # how many patches per col?
   number_of_patches = length(data_scaled)
@@ -73,7 +81,7 @@ for col_index = 1:1
   ax = gca()
   for row_index = 1:number_of_patches
 
-    origin_point = [(col_index - 1)+(col_index - 1)*epsilon+round(2.60*number_of_cols)+1,(row_index - 1)+(row_index - 1)*epsilon+1];
+    origin_point = [(col_index - 1)+(col_index - 1)*epsilon+round(2.35*number_of_cols)+1,(row_index - 1)+(row_index - 1)*epsilon+1];
 
     # what color?
     fraction = (data_scaled[row_index]^2)/(K^2+data_scaled[row_index]^2)
@@ -98,4 +106,4 @@ end
 
 axis("square")
 axis("off")
-savefig("./raw_figs/Norm-System-Raw.pdf")
+savefig("./raw_figs/Norm-System-Raw-Connection-SVD-Full-Blue.pdf")
