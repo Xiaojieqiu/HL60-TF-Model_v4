@@ -36,6 +36,8 @@ using Sundials
 # List any custom includes here ...
 using Search
 using JSON
+using PyPlot
+using Distributions
 include("Simulation.jl")
 include("Robustness.jl")
 include("./search_functions/Error.jl")

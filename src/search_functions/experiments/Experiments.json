@@ -9,7 +9,7 @@
     },
     {
       "experiment_id":"e29e90f9-d137-41ea-8a04-80689cac0b95",
-      "data_file":"./search_functions/data/GiF1-WTHL60.txt",
+      "data_file":"./search_functions/data/GFI1-WTHL60.txt",
       "output_index":"45",
       "protein_symbol":"protein_gene_GFI1",
       "error_function":"Error"
