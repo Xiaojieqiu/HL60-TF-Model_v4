@@ -115,13 +115,13 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 	# constants (from bionumbers)       units
 	# ------------------------------------------------------------------------------------------#
 	cell_diameter = 12                  # mum
-	number_of_rnapII = 75000            # copies/cells
+	number_of_rnapII = 85000            # copies/cells
 	number_of_ribosome = 1e6            # copies/cells
-	mRNA_half_life_TF = 2               # hrs
+	mRNA_half_life_TF = 4               # hrs
 	protein_half_life = 10              # hrs
 	doubling_time_cell = 19.5           # hrs
 	max_translation_rate = 5            # aa/sec
-	max_transcription_rate = 6.0        # nt/sec
+	max_transcription_rate = 60.0        # nt/sec
 	average_transcript_length = 15000   # nt
 	average_protein_length = 5000       # aa
 	fraction_nucleus = 0.49             # dimensionless
@@ -157,8 +157,8 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 	death_rate_constant = 0.2*maximum_specific_growth_rate                            # hr^-1
 
 	# Saturation constants for translation and trascription -
-	saturation_transcription = 4600*(1/av_number)*(1/V)*1e9                           # nM
-	saturation_translation = 90000*(1/av_number)*(1/V)*1e9                           # nM
+	saturation_transcription = 600*(1/av_number)*(1/V)*1e9                           # nM
+	saturation_translation = 95000*(1/av_number)*(1/V)*1e9                           # nM
 	# -------------------------------------------------------------------------------------------#
 
 	# initial condition array -
@@ -571,7 +571,7 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 	background_copy_number_dictionary = Dict{AbstractString,Float64}()
 	background_copy_number_dictionary["protein_gene_AP1"] = 100.0
 	background_copy_number_dictionary["protein_gene_AhR"] = 100.0
-	background_copy_number_dictionary["protein_gene_CD11b"] = 100.0
+	background_copy_number_dictionary["protein_gene_CD11b"] = 0.0
 	background_copy_number_dictionary["protein_gene_CD14"] = 100.0
 	background_copy_number_dictionary["protein_gene_CD38"] = 100.0
 	background_copy_number_dictionary["protein_gene_CEBPa"] = 100.0

@@ -36,7 +36,7 @@ writedlm("./plot_ensemble/scaled_data_IRF1.dat",scaled_data_IRF1);
 # Load the ensemble for GIF1 -
 time_GIF1 = [0.0 48.0]
 (raw_data_GIF1,scaled_data_GIF1) = process_ensemble_data(path_to_sim_files,time_GIF1,45);
-writedlm("./plot_ensemble/scaled_data_GIF1.dat",scaled_data_GIF1);
+writedlm("./plot_ensemble/scaled_data_GFI1.dat",scaled_data_GIF1);
 
 # Load the ensemble for PU1 -
 time_PU1 = [0.0 48.0]

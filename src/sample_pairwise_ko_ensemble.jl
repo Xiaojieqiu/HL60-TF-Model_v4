@@ -10,28 +10,16 @@ time_step_size = 0.01
 data_dictionary = DataDictionary(time_start,time_stop,time_step_size)
 
 # get my initial parameter guess from the previous run -
-obj_array = readdlm("error_archive.dat.4")
-par_array = readdlm("parameter_archive.dat.4")
-obj_array = obj_array[2:end]
-par_array = par_array[:,2:end]
-
-# sort by error -
-index_sort_error = sortperm(obj_array)
-
-# Take the top 10 -
-index_of_good_sets = index_sort_error[1:10]
+par_array = readdlm("parameter_ensemble.dat")
 
 # how many ensemble members do we have?
-number_of_samples = length(index_of_good_sets)
+(number_of_rows,number_of_samples) = size(par_array)
 
 # main loop -
 for outer_sample_index = 1:number_of_samples
 
-  # get the *local* sample index?
-  sample_index = index_of_good_sets[outer_sample_index]
-
   # what parameters are we looking at?
-  parameter_set = par_array[:,sample_index]
+  parameter_set = par_array[:,outer_sample_index]
 
   # make a copy of the data dictionary -
   copy_data_dictionary = deepcopy(data_dictionary)
@@ -74,6 +62,6 @@ for outer_sample_index = 1:number_of_samples
   end
 
   # dump data to disk -
-  data_filename = "./pairwise_gene_ko/delta_data_EI_"*string(sample_index)*"_LI_"*string(outer_sample_index)*".dat"
+  data_filename = "./pairwise_gene_ko/delta_data_LI_"*string(outer_sample_index)*".dat"
   writedlm(data_filename,pairwise_ko_array);
 end

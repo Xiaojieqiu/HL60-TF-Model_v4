@@ -69,7 +69,8 @@ function process_ensemble_data(path_to_sim_files,time_array,species_index)
   raw_data_array = zeros(length(time_array),1);
 
   # go thru the src file list, and copy the files to the output path -
-  for (sim_file_index,sim_file) in enumerate(list_of_sim_files)
+  sim_file_index = 1
+  for sim_file in list_of_sim_files
 
     # path to sim file -
     sim_file_path = "./"*path_to_sim_files*"/"*string(sim_file)
@@ -86,6 +87,9 @@ function process_ensemble_data(path_to_sim_files,time_array,species_index)
 
     @show (sim_file_index,sim_file)
     raw_data_array = hcat(raw_data_array,transpose(interpolated_data_array))
+
+    # update -
+    sim_file_index = sim_file_index + 1
   end
 
   # Generate the scaled data -
@@ -644,7 +648,7 @@ function estimate_steady_state(epsilon,data_dictionary)
       data_dictionary["initial_condition_array"] = initial_condition_array;
     end
 
-    if (iteration_counter>15)
+    if (iteration_counter>5)
       did_reach_steady_state = true
       return (vec(X2[end,:]));
     else

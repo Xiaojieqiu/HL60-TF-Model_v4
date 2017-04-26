@@ -10,11 +10,23 @@ color_2 = (1/255)*[224,224,224]
 K = 0.45
 
 # load data array -
-raw_data_array = readdlm("./pairwise_connection_ko/delta_data_EI_124_LI_1.dat")
-(U,S,V) = svd(raw_data_array)
+number_of_samples = 10
+counter = 1
+average_raw_data_array = zeros(16,16)
+for sample_index = 1:number_of_samples
+  raw_data_array = readdlm("./pairwise_gene_ko/delta_data_LI_"*string(sample_index)*".dat")
 
-# # remove the "outer" data -
-# raw_data_array = raw_data_array[2:end-1,2:end-1]
+  average_raw_data_array = average_raw_data_array*((counter-1)/counter)+raw_data_array*(1/counter)
+
+  # update the counter -
+  counter = counter + 1
+end
+
+(U,S,V) = svd(average_raw_data_array,thin=false)
+
+# remove the "outer" data -
+#raw_data_array = raw_data_array[2:end-1,2:end-1]
+#(U,S,V) = svd(raw_data_array)
 #
 # # scale -
 # scale_factor = maximum(raw_data_array)
@@ -106,4 +118,4 @@ end
 
 axis("square")
 axis("off")
-savefig("./raw_figs/Norm-System-Raw-Connection-SVD-Full-Blue.pdf")
+savefig("./raw_figs/Norm-System-Raw-Gene-SVD-Full-Blue.pdf")

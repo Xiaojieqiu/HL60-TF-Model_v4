@@ -67,13 +67,14 @@ function objective_function(parameter_guess::Array{Float64,1})
   end
 
   # how many objectives do we have?
-  obj_array = zeros(13)
+  obj_array = zeros(14)
 
   # Call simulation routine -
   # (run the model to SS, and then set the ICs to the SS for this parameter set)
   (time_array,simulation_state_array) = add_atra_simulation(time_start,time_stop,time_step_size,data_dictionary);
 
   wght_array = ones(13)
+  wght_array[3] = 2.5 # C/EBPa
   wght_array[4] = 5.4 # PU1
   wght_array[5] = 5.2 # P47
   wght_array[9] = 2.84 # IRF1
@@ -101,9 +102,58 @@ function objective_function(parameter_guess::Array{Float64,1})
     obj_array[experiment_index] = wght_array[experiment_index]*error_value;
   end
 
+  # ok, so we want to make sure mRNA is between 0.1 and 1 nM
+  mRNA_index_array = collect(19:1:34)
+  mRNA_error_array = zeros(length(mRNA_index_array))
+  mRNA_lower_bound = [
+    0.01	;	# 19	mRNA_gene_AP1
+    0.0	;	# 20	mRNA_gene_AhR
+    0.0	;	# 21	mRNA_gene_CD11b
+    0.0	;	# 22	mRNA_gene_CD14
+    0.0	;	# 23	mRNA_gene_CD38
+    0.0	;	# 24	mRNA_gene_CEBPa
+    0.01	;	# 25	mRNA_gene_E2F
+    0.0	;	# 26	mRNA_gene_EGR1
+    0.0	;	# 27	mRNA_gene_GFI1
+    0.0	;	# 28	mRNA_gene_IRF1
+    0.0	;	# 29	mRNA_gene_OCT1
+    0.0	;	# 30	mRNA_gene_OCT4
+    0.01	;	# 31	mRNA_gene_P21
+    0.0	;	# 32	mRNA_gene_P47Phox
+    0.0	;	# 33	mRNA_gene_PPARg
+    0.01	;	# 34	mRNA_gene_PU1
+  ]
+  mRNA_upper_bound = 1.0
+  mRNA_counter = 1
+  for mRNA_index in mRNA_index_array
 
+    mRNA_value_array = simulation_state_array[:,mRNA_index]
 
+    # do we violate the lower or upper bounds?
+    idx_lb_violation = find(mRNA_value_array.<mRNA_lower_bound[mRNA_counter])
+    idx_ub_violation = find(mRNA_value_array.>mRNA_upper_bound)
 
+    if (isempty(idx_lb_violation) == false)
+      lower_bound_violation = 10*sum((mRNA_value_array[idx_lb_violation] - mRNA_lower_bound[mRNA_counter]).^2)
+    else
+      lower_bound_violation = 0.0
+    end
+
+    if (isempty(idx_lb_violation) == false)
+      upper_bound_violation = 10*sum((mRNA_value_array[idx_ub_violation] - mRNA_upper_bound).^2)
+    else
+      upper_bound_violation = 0.0
+    end
+
+    # grab -
+    mRNA_error_array[mRNA_counter] = lower_bound_violation+upper_bound_violation
+    mRNA_counter = mRNA_counter + 1
+  end
+
+  # add mRNA violation -
+  obj_array[end] = sum(mRNA_error_array)
+
+  # return -
   return sum(obj_array)
 end
 
@@ -222,60 +272,60 @@ function parameter_bounds_function(parameter_guess::Array{Float64,1})
 		0.0 1000.0  ; # "K_gene_PU1_gene_GFI1"	;	# 90
 
     # weight parameters -
-		0 100 ; # "W_gene_AP1_RNAP"	;	# 91
+		0 1 ; # "W_gene_AP1_RNAP"	;	# 91
 		0 100 ; # "W_gene_AP1_gene_AhR"	;	# 92
 		0 100 ; # "W_gene_AP1_gene_PU1"	;	# 93
 		0 100 ; # "W_gene_AP1_gene_PPARg"	;	# 94
-		0 100 ; # "W_gene_AhR_RNAP"	;	# 95
+		0 1 ; # "W_gene_AhR_RNAP"	;	# 95
 		0 100 ; # "W_gene_AhR_gene_Trigger"	;	# 96
-		0 100 ; # "W_gene_CD11b_RNAP"	;	# 97
+		0 1 ; # "W_gene_CD11b_RNAP"	;	# 97
 		0 100 ; # "W_gene_CD11b_gene_PU1_gene_cRAF"	;	# 98
 		0 0 ; # "W_gene_CD14_RNAP"	;	# 99
 		0 0 ; # "W_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF"	;	# 100
-		0 100 ; # "W_gene_CD38_RNAP"	;	# 101
+		0 1 ; # "W_gene_CD38_RNAP"	;	# 101
 		0 100 ; # "W_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF"	;	# 102
 		0 100 ; # "W_gene_CEBPa_RNAP"	;	# 103
 		0 100 ; # "W_gene_CEBPa_gene_Trigger"	;	# 104
 		0 100 ; # "W_gene_CEBPa_gene_PPARg"	;	# 105
 		0 100 ; # "W_gene_CEBPa_gene_CEBPa"	;	# 106
 		0 100 ; # "W_gene_CEBPa_gene_GFI1"	;	# 107
-		0 100 ; # "W_gene_E2F_RNAP"	;	# 108
+		0 1 ; # "W_gene_E2F_RNAP"	;	# 108
 		0 100 ; # "W_gene_E2F_gene_E2F"	;	# 109
 		0 100 ; # "W_gene_E2F_gene_PPARg"	;	# 110
 		0 100 ; # "W_gene_E2F_gene_CEBPa"	;	# 111
 		0 100 ; # "W_gene_E2F_gene_GFI1"	;	# 112
 		0 100 ; # "W_gene_E2F_gene_cRAF"	;	# 113
-		0 100 ; # "W_gene_EGR1_RNAP"	;	# 114
+		0 1 ; # "W_gene_EGR1_RNAP"	;	# 114
 		0 100 ; # "W_gene_EGR1_gene_Trigger"	;	# 115
 		0 100 ; # "W_gene_EGR1_gene_PU1"	;	# 116
 		0 100 ; # "W_gene_EGR1_gene_PPARg"	;	# 117
 		0 100 ; # "W_gene_EGR1_gene_GFI1"	;	# 118
-		0 100 ; # "W_gene_GFI1_RNAP"	;	# 119
+		0 1 ; # "W_gene_GFI1_RNAP"	;	# 119
 		0 100 ; # "W_gene_GFI1_gene_CEBPa"	;	# 120
 		0 100 ; # "W_gene_GFI1_gene_EGR1"	;	# 121
-		0 100 ; # "W_gene_IRF1_RNAP"	;	# 122
+		0 1 ; # "W_gene_IRF1_RNAP"	;	# 122
 		0 100 ; # "W_gene_IRF1_gene_Trigger"	;	# 123
 		0 100 ; # "W_gene_IRF1_gene_AhR"	;	# 124
 		0 100 ; # "W_gene_IRF1_gene_PPARg"	;	# 125
-		0 100 ; # "W_gene_OCT1_RNAP"	;	# 126
+		0 1 ; # "W_gene_OCT1_RNAP"	;	# 126
 		0 100 ; # "W_gene_OCT1_gene_PPARg"	;	# 127
-		0 100 ; # "W_gene_OCT4_RNAP"	;	# 128
+		0 10 ; # "W_gene_OCT4_RNAP"	;	# 128
 		0 100 ; # "W_gene_OCT4_gene_Trigger"	;	# 129
 		0 100 ; # "W_gene_OCT4_gene_AhR"	;	# 130
 		0 100 ; # "W_gene_OCT4_gene_cRAF"	;	# 131
-		0 100 ; # "W_gene_P21_RNAP"	;	# 132
+		0 1 ; # "W_gene_P21_RNAP"	;	# 132
 		0 100 ; # "W_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF"	;	# 133
 		0 100 ; # "W_gene_P21_gene_GFI1"	;	# 134
-		0 100 ; # "W_gene_P47Phox_RNAP"	;	# 135
+		0 1 ; # "W_gene_P47Phox_RNAP"	;	# 135
 		0 100 ; # "W_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF"	;	# 136
 		0 100 ; # "W_gene_P47Phox_gene_PPARg"	;	# 137
-		0 100 ; # "W_gene_PPARg_RNAP"	;	# 138
+		0 1 ; # "W_gene_PPARg_RNAP"	;	# 138
 		0 100 ; # "W_gene_PPARg_gene_Trigger"	;	# 139
 		0 100 ; # "W_gene_PPARg_gene_CEBPa"	;	# 140
 		0 100 ; # "W_gene_PPARg_gene_EGR1"	;	# 141
 		0 100 ; # "W_gene_PPARg_gene_PU1"	;	# 142
 		0 100 ; # "W_gene_PPARg_gene_AP1"	;	# 143
-		0 100 ; # "W_gene_PU1_RNAP"	;	# 144
+		0 1 ; # "W_gene_PU1_RNAP"	;	# 144
 		0 100 ; # "W_gene_PU1_gene_Trigger"	;	# 145
 		0 100 ; # "W_gene_PU1_gene_CEBPa"	;	# 146
 		0 100 ; # "W_gene_PU1_gene_PU1"	;	# 147
@@ -331,7 +381,7 @@ function updateStepSize(LAMBDA_SUCC,AVG_P_SUCC,P_SUCC_TARGET,CP,D,SIGMA)
 	SIGMA = SIGMA*exp(F);
 
 	if (SIGMA<= 1e-5)
-		SIGMA = 1e-5;
+		SIGMA = 0.05;
 	end
 
   return (SIGMA,AVG_P_SUCC);
@@ -349,7 +399,7 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
   CP = 1/12;
   CC = 2/(N+2);
   CCOV = 2/(N^2+6);
-  PTHRESH = 0.99;
+  PTHRESH = 0.95;
 
   # Set the initial search directions - apply -
   A = eye(N,N);
@@ -358,7 +408,7 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
   # Setup the run -
   should_loop_continue = true
   parameter_array = kVI;
-  SIGMA = 0.10;
+  SIGMA = 0.01;
 
   # Initialize -
   error_array = zeros(2)
@@ -410,7 +460,7 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
 
   		# If we have a successful step and we are stuck at the min, reset this
   		if (SIGMA<=1e-5)
-  			SIGMA = 0.05;
+  			SIGMA = 0.01;
   		end;
 
   		# Update the counter =
@@ -418,10 +468,10 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
 
       # Write parameters to disk ...
       parameter_archive = [parameter_archive parameter_array]
-      writedlm("./parameter_archive.dat.4",parameter_archive);
+      writedlm("./parameter_archive.dat.13",parameter_archive);
 
       error_archive = [error_archive error_array[1]]
-      writedlm("./error_archive.dat.4",error_archive);
+      writedlm("./error_archive.dat.13",error_archive);
 
       # reset the number of failed steps -
       number_of_failed_steps = 0;
@@ -439,11 +489,18 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
   		if (number_of_failed_steps>max_number_of_failed_steps)
 
   			# Reset the step length -
-  			SIGMA = 0.10;
+  			SIGMA = 0.01;
 
   			# Reset the direction array -
   			A = eye(N,N);
-  			AVG_P_SUCC = P_SUCC_TARGET;
+
+        # Initialize the algorithm parameters -
+        D = 1+N/2;
+        P_SUCC_TARGET = 2/11;
+        CP = 1/12;
+        CC = 2/(N+2);
+        CCOV = 2/(N^2+6);
+        PTHRESH = 0.95;
 
         # Generate new parameter set -
         (perturbed_parameter_array,zV) = sample_function(parameter_array,initial_parameter_array,N,A,SIGMA);
