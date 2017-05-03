@@ -6,6 +6,48 @@
       "output_index":"52",
       "protein_symbol":"protein_gene_PU1",
       "error_function":"Error"
+    },
+    {
+      "experiment_id":"f91dd0b8-0321-448e-95f4-7f4e527bcd42",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"37",
+      "protein_symbol":"protein_gene_AP1",
+      "error_function":"ErrorUnmeasured"
+    },
+    {
+      "experiment_id":"cda1fcb4-0d6e-4e1c-945c-0cddeeb438d0",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"51",
+      "protein_symbol":"protein_gene_PPARg",
+      "error_function":"ErrorUnmeasured"
+    },
+    {
+      "experiment_id":"f91dd0b8-0321-448e-95f4-7f4e527bcd42",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"37",
+      "protein_symbol":"protein_gene_AP1",
+      "error_function":"ErrorUnmeasured"
+    },
+    {
+      "experiment_id":"cda1fcb4-0d6e-4e1c-945c-0cddeeb438d0",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"51",
+      "protein_symbol":"protein_gene_PPARg",
+      "error_function":"ErrorUnmeasured"
+    },
+    {
+      "experiment_id":"f91dd0b8-0321-448e-95f4-7f4e527bcd42",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"37",
+      "protein_symbol":"protein_gene_AP1",
+      "error_function":"ErrorUnmeasured"
+    },
+    {
+      "experiment_id":"cda1fcb4-0d6e-4e1c-945c-0cddeeb438d0",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"51",
+      "protein_symbol":"protein_gene_PPARg",
+      "error_function":"ErrorUnmeasured"
     }
   ]
 }

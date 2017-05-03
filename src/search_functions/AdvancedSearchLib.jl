@@ -73,13 +73,12 @@ function objective_function(parameter_guess::Array{Float64,1})
   # (run the model to SS, and then set the ICs to the SS for this parameter set)
   (time_array,simulation_state_array) = add_atra_simulation(time_start,time_stop,time_step_size,data_dictionary);
 
-  wght_array = ones(13)
+  wght_array = ones(14)
   wght_array[3] = 2.5 # C/EBPa
   wght_array[4] = 5.4 # PU1
   wght_array[5] = 5.2 # P47
   wght_array[9] = 2.84 # IRF1
   wght_array[10] = 2.43 # EGR1
-
 
   # Call the error functions -
   # loop through the experimental dictionary, and call the appropriate error function -
@@ -102,57 +101,6 @@ function objective_function(parameter_guess::Array{Float64,1})
     obj_array[experiment_index] = wght_array[experiment_index]*error_value;
   end
 
-  # ok, so we want to make sure mRNA is between 0.1 and 1 nM
-  mRNA_index_array = collect(19:1:34)
-  mRNA_error_array = zeros(length(mRNA_index_array))
-  mRNA_lower_bound = [
-    0.01	;	# 19	mRNA_gene_AP1
-    0.0	;	# 20	mRNA_gene_AhR
-    0.0	;	# 21	mRNA_gene_CD11b
-    0.0	;	# 22	mRNA_gene_CD14
-    0.0	;	# 23	mRNA_gene_CD38
-    0.0	;	# 24	mRNA_gene_CEBPa
-    0.01	;	# 25	mRNA_gene_E2F
-    0.0	;	# 26	mRNA_gene_EGR1
-    0.0	;	# 27	mRNA_gene_GFI1
-    0.0	;	# 28	mRNA_gene_IRF1
-    0.0	;	# 29	mRNA_gene_OCT1
-    0.0	;	# 30	mRNA_gene_OCT4
-    0.01	;	# 31	mRNA_gene_P21
-    0.0	;	# 32	mRNA_gene_P47Phox
-    0.0	;	# 33	mRNA_gene_PPARg
-    0.01	;	# 34	mRNA_gene_PU1
-  ]
-  mRNA_upper_bound = 1.0
-  mRNA_counter = 1
-  for mRNA_index in mRNA_index_array
-
-    mRNA_value_array = simulation_state_array[:,mRNA_index]
-
-    # do we violate the lower or upper bounds?
-    idx_lb_violation = find(mRNA_value_array.<mRNA_lower_bound[mRNA_counter])
-    idx_ub_violation = find(mRNA_value_array.>mRNA_upper_bound)
-
-    if (isempty(idx_lb_violation) == false)
-      lower_bound_violation = 10*sum((mRNA_value_array[idx_lb_violation] - mRNA_lower_bound[mRNA_counter]).^2)
-    else
-      lower_bound_violation = 0.0
-    end
-
-    if (isempty(idx_lb_violation) == false)
-      upper_bound_violation = 10*sum((mRNA_value_array[idx_ub_violation] - mRNA_upper_bound).^2)
-    else
-      upper_bound_violation = 0.0
-    end
-
-    # grab -
-    mRNA_error_array[mRNA_counter] = lower_bound_violation+upper_bound_violation
-    mRNA_counter = mRNA_counter + 1
-  end
-
-  # add mRNA violation -
-  obj_array[end] = sum(mRNA_error_array)
-
   # return -
   return sum(obj_array)
 end
@@ -161,6 +109,11 @@ function sample_function(parameter_guess,kVI,NPARAMETERS,A,SIGMA)
 
   # Generate a new vector -
   zV = randn(NPARAMETERS);
+
+  parameter_filter = zeros(NPARAMETERS)
+  idx_ones = [9,10,13,14,97,98,101,102]
+  parameter_filter[idx_ones] = 1.0
+  zV = parameter_filter.*zV
 
   # Compute the new perturbed parameter vector -
   perturbed_parameter_array = parameter_guess.*(1 + SIGMA*A*zV);
@@ -180,95 +133,95 @@ function parameter_bounds_function(parameter_guess::Array{Float64,1})
   bounds_array = [
 
     # binding parameters -
-    0.0 4.0    ; # "n_gene_AP1_gene_AhR"	;	# 1
+    1.0 4.0    ; # "n_gene_AP1_gene_AhR"	;	# 1
 		0.0 1000.0  ; # "K_gene_AP1_gene_AhR"	;	# 2
-		0.0 4.0    ; # "n_gene_AP1_gene_PU1"	;	# 3
+		1.0 4.0    ; # "n_gene_AP1_gene_PU1"	;	# 3
 		0.0 1000.0  ; # "K_gene_AP1_gene_PU1"	;	# 4
-		0.0 4.0    ; # "n_gene_AP1_gene_PPARg"	;	# 5
+		1.0 4.0    ; # "n_gene_AP1_gene_PPARg"	;	# 5
 		0.0 1000.0  ; # "K_gene_AP1_gene_PPARg"	;	# 6
-		0.0 4.0    ; # "n_gene_AhR_gene_Trigger"	;	# 7
+		1.0 4.0    ; # "n_gene_AhR_gene_Trigger"	;	# 7
 		0.0 1000.0  ; # "K_gene_AhR_gene_Trigger"	;	# 8
-		0.0 4.0    ; # "n_gene_CD11b_gene_PU1_gene_cRAF"	;	# 9
+		1.0 4.0    ; # "n_gene_CD11b_gene_PU1_gene_cRAF"	;	# 9
 		0.0 1000.0  ; # "K_gene_CD11b_gene_PU1_gene_cRAF"	;	# 10
-		0.0 4.0    ; # "n_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF"	;	# 11
+		1.0 4.0    ; # "n_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF"	;	# 11
 		0.0 1000.0  ; # "K_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF"	;	# 12
-		0.0 4.0    ; # "n_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF"	;	# 13
+		1.0 4.0    ; # "n_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF"	;	# 13
 		0.0 1000.0  ; # "K_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF"	;	# 14
-		0.0 4.0    ; # "n_gene_CEBPa_gene_Trigger"	;	# 15
+		1.0 4.0    ; # "n_gene_CEBPa_gene_Trigger"	;	# 15
 		0.0 1000.0  ; # "K_gene_CEBPa_gene_Trigger"	;	# 16
-		0.0 4.0    ; # "n_gene_CEBPa_gene_PPARg"	;	# 17
+		1.0 4.0    ; # "n_gene_CEBPa_gene_PPARg"	;	# 17
 		0.0 1000.0  ; # "K_gene_CEBPa_gene_PPARg"	;	# 18
-		0.0 4.0    ; # "n_gene_CEBPa_gene_CEBPa"	;	# 19
+		1.0 4.0    ; # "n_gene_CEBPa_gene_CEBPa"	;	# 19
 		0.0 1000.0  ; # "K_gene_CEBPa_gene_CEBPa"	;	# 20
-		0.0 4.0    ; # "n_gene_CEBPa_gene_GFI1"	;	# 21
+		1.0 4.0    ; # "n_gene_CEBPa_gene_GFI1"	;	# 21
 		0.0 1000.0  ; # "K_gene_CEBPa_gene_GFI1"	;	# 22
-		0.0 4.0    ; # "n_gene_E2F_gene_E2F"	;	# 23
+		1.0 4.0    ; # "n_gene_E2F_gene_E2F"	;	# 23
 		0.0 1000.0  ; # "K_gene_E2F_gene_E2F"	;	# 24
-		0.0 4.0    ; # "n_gene_E2F_gene_PPARg"	;	# 25
+		1.0 4.0    ; # "n_gene_E2F_gene_PPARg"	;	# 25
 		0.0 1000.0  ; # "K_gene_E2F_gene_PPARg"	;	# 26
-		0.0 4.0    ; # "n_gene_E2F_gene_CEBPa"	;	# 27
+		1.0 4.0    ; # "n_gene_E2F_gene_CEBPa"	;	# 27
 		0.0 1000.0  ; # "K_gene_E2F_gene_CEBPa"	;	# 28
-		0.0 4.0    ; # "n_gene_E2F_gene_GFI1"	;	# 29
+		1.0 4.0    ; # "n_gene_E2F_gene_GFI1"	;	# 29
 		0.0 1000.0  ; # "K_gene_E2F_gene_GFI1"	;	# 30
-		0.0 4.0    ; # "n_gene_E2F_gene_cRAF"	;	# 31
+		1.0 4.0    ; # "n_gene_E2F_gene_cRAF"	;	# 31
 		0.0 1000.0  ; # "K_gene_E2F_gene_cRAF"	;	# 32
-		0.0 4.0    ; # "n_gene_EGR1_gene_Trigger"	;	# 33
+		1.0 4.0    ; # "n_gene_EGR1_gene_Trigger"	;	# 33
 		0.0 1000.0  ; # "K_gene_EGR1_gene_Trigger"	;	# 34
-		0.0 4.0    ; # "n_gene_EGR1_gene_PU1"	;	# 35
+		1.0 4.0    ; # "n_gene_EGR1_gene_PU1"	;	# 35
 		0.0 1000.0  ; # "K_gene_EGR1_gene_PU1"	;	# 36
-		0.0 4.0    ; # "n_gene_EGR1_gene_PPARg"	;	# 37
+		1.0 4.0    ; # "n_gene_EGR1_gene_PPARg"	;	# 37
 		0.0 1000.0  ; # "K_gene_EGR1_gene_PPARg"	;	# 38
-		0.0 4.0    ; # "n_gene_EGR1_gene_GFI1"	;	# 39
+		1.0 4.0    ; # "n_gene_EGR1_gene_GFI1"	;	# 39
 		0.0 1000.0  ; # "K_gene_EGR1_gene_GFI1"	;	# 40
-		0.0 4.0    ; # "n_gene_GFI1_gene_CEBPa"	;	# 41
+		1.0 4.0    ; # "n_gene_GFI1_gene_CEBPa"	;	# 41
 		0.0 1000.0  ; # "K_gene_GFI1_gene_CEBPa"	;	# 42
-		0.0 4.0    ; # "n_gene_GFI1_gene_EGR1"	;	# 43
+		1.0 4.0    ; # "n_gene_GFI1_gene_EGR1"	;	# 43
 		0.0 1000.0  ; # "K_gene_GFI1_gene_EGR1"	;	# 44
-		0.0 4.0    ; # "n_gene_IRF1_gene_Trigger"	;	# 45
+		1.0 4.0    ; # "n_gene_IRF1_gene_Trigger"	;	# 45
 		0.0 1000.0  ; # "K_gene_IRF1_gene_Trigger"	;	# 46
-		0.0 4.0    ; # "n_gene_IRF1_gene_AhR"	;	# 47
+		1.0 4.0    ; # "n_gene_IRF1_gene_AhR"	;	# 47
 		0.0 1000.0  ; # "K_gene_IRF1_gene_AhR"	;	# 48
-		0.0 4.0    ; # "n_gene_IRF1_gene_PPARg"	;	# 49
+		1.0 4.0    ; # "n_gene_IRF1_gene_PPARg"	;	# 49
 		0.0 1000.0  ; # "K_gene_IRF1_gene_PPARg"	;	# 50
-		0.0 4.0    ; # "n_gene_OCT1_gene_PPARg"	;	# 51
+		1.0 4.0    ; # "n_gene_OCT1_gene_PPARg"	;	# 51
 		0.0 1000.0  ; # "K_gene_OCT1_gene_PPARg"	;	# 52
-		0.0 4.0    ; # "n_gene_OCT4_gene_Trigger"	;	# 53
+		1.0 4.0    ; # "n_gene_OCT4_gene_Trigger"	;	# 53
 		0.0 1000.0  ; # "K_gene_OCT4_gene_Trigger"	;	# 54
-		0.0 4.0    ; # "n_gene_OCT4_gene_AhR"	;	# 55
+		1.0 4.0    ; # "n_gene_OCT4_gene_AhR"	;	# 55
 		0.0 1000.0  ; # "K_gene_OCT4_gene_AhR"	;	# 56
-		0.0 4.0    ; # "n_gene_OCT4_gene_cRAF"	;	# 57
+		1.0 4.0    ; # "n_gene_OCT4_gene_cRAF"	;	# 57
 		0.0 1000.0  ; # "K_gene_OCT4_gene_cRAF"	;	# 58
-		0.0 4.0    ; # "n_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF"	;	# 59
+		1.0 4.0    ; # "n_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF"	;	# 59
 		0.0 1000.0  ; # "K_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF"	;	# 60
-		0.0 4.0    ; # "n_gene_P21_gene_GFI1"	;	# 61
+		1.0 4.0    ; # "n_gene_P21_gene_GFI1"	;	# 61
 		0.0 1000.0  ; # "K_gene_P21_gene_GFI1"	;	# 62
-		0.0 4.0    ; # "n_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF"	;	# 63
+		1.0 4.0    ; # "n_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF"	;	# 63
 		0.0 1000.0  ; # "K_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF"	;	# 64
-		0.0 4.0    ; # "n_gene_P47Phox_gene_PPARg"	;	# 65
+		1.0 4.0    ; # "n_gene_P47Phox_gene_PPARg"	;	# 65
 		0.0 1000.0  ; # "K_gene_P47Phox_gene_PPARg"	;	# 66
-		0.0 4.0    ; # "n_gene_PPARg_gene_Trigger"	;	# 67
+		1.0 4.0    ; # "n_gene_PPARg_gene_Trigger"	;	# 67
 		0.0 1000.0  ; # "K_gene_PPARg_gene_Trigger"	;	# 68
-		0.0 4.0    ; # "n_gene_PPARg_gene_CEBPa"	;	# 69
+		1.0 4.0    ; # "n_gene_PPARg_gene_CEBPa"	;	# 69
 		0.0 1000.0  ; # "K_gene_PPARg_gene_CEBPa"	;	# 70
-		0.0 4.0    ; # "n_gene_PPARg_gene_EGR1"	;	# 71
+		1.0 4.0    ; # "n_gene_PPARg_gene_EGR1"	;	# 71
 		0.0 1000.0  ; # "K_gene_PPARg_gene_EGR1"	;	# 72
-		0.0 4.0    ; # "n_gene_PPARg_gene_PU1"	;	# 73
+		1.0 4.0    ; # "n_gene_PPARg_gene_PU1"	;	# 73
 		0.0 1000.0  ; # "K_gene_PPARg_gene_PU1"	;	# 74
-		0.0 4.0    ; # "n_gene_PPARg_gene_AP1"	;	# 75
+		1.0 4.0    ; # "n_gene_PPARg_gene_AP1"	;	# 75
 		0.0 1000.0  ; # "K_gene_PPARg_gene_AP1"	;	# 76
-		0.0 4.0    ; # "n_gene_PU1_gene_Trigger"	;	# 77
+		1.0 4.0    ; # "n_gene_PU1_gene_Trigger"	;	# 77
 		0.0 1000.0  ; # "K_gene_PU1_gene_Trigger"	;	# 78
-		0.0 4.0    ; # "n_gene_PU1_gene_CEBPa"	;	# 79
+		1.0 4.0    ; # "n_gene_PU1_gene_CEBPa"	;	# 79
 		0.0 1000.0  ; # "K_gene_PU1_gene_CEBPa"	;	# 80
-		0.0 4.0    ; # "n_gene_PU1_gene_PU1"	;	# 81
+		1.0 4.0    ; # "n_gene_PU1_gene_PU1"	;	# 81
 		0.0 1000.0  ; # "K_gene_PU1_gene_PU1"	;	# 82
-		0.0 4.0    ; # "n_gene_PU1_gene_AP1"	;	# 83
+		1.0 4.0    ; # "n_gene_PU1_gene_AP1"	;	# 83
 		0.0 1000.0  ; # "K_gene_PU1_gene_AP1"	;	# 84
-		0.0 4.0    ; # "n_gene_PU1_gene_OCT1"	;	# 85
+		1.0 4.0    ; # "n_gene_PU1_gene_OCT1"	;	# 85
 		0.0 1000.0  ; # "K_gene_PU1_gene_OCT1"	;	# 86
-		0.0 4.0    ; # "n_gene_PU1_gene_AhR"	;	# 87
+		1.0 4.0    ; # "n_gene_PU1_gene_AhR"	;	# 87
 		0.0 1000.0  ; # "K_gene_PU1_gene_AhR"	;	# 88
-		0.0 4.0    ; # "n_gene_PU1_gene_GFI1"	;	# 89
+		1.0 4.0    ; # "n_gene_PU1_gene_GFI1"	;	# 89
 		0.0 1000.0  ; # "K_gene_PU1_gene_GFI1"	;	# 90
 
     # weight parameters -
@@ -290,11 +243,11 @@ function parameter_bounds_function(parameter_guess::Array{Float64,1})
 		0 100 ; # "W_gene_CEBPa_gene_CEBPa"	;	# 106
 		0 100 ; # "W_gene_CEBPa_gene_GFI1"	;	# 107
 		0 1 ; # "W_gene_E2F_RNAP"	;	# 108
-		0 100 ; # "W_gene_E2F_gene_E2F"	;	# 109
-		0 100 ; # "W_gene_E2F_gene_PPARg"	;	# 110
-		0 100 ; # "W_gene_E2F_gene_CEBPa"	;	# 111
-		0 100 ; # "W_gene_E2F_gene_GFI1"	;	# 112
-		0 100 ; # "W_gene_E2F_gene_cRAF"	;	# 113
+		0 1 ; # "W_gene_E2F_gene_E2F"	;	# 109
+		10 100 ; # "W_gene_E2F_gene_PPARg"	;	# 110
+		10 100 ; # "W_gene_E2F_gene_CEBPa"	;	# 111
+		10 100 ; # "W_gene_E2F_gene_GFI1"	;	# 112
+		10 100 ; # "W_gene_E2F_gene_cRAF"	;	# 113
 		0 1 ; # "W_gene_EGR1_RNAP"	;	# 114
 		0 100 ; # "W_gene_EGR1_gene_Trigger"	;	# 115
 		0 100 ; # "W_gene_EGR1_gene_PU1"	;	# 116
@@ -381,7 +334,7 @@ function updateStepSize(LAMBDA_SUCC,AVG_P_SUCC,P_SUCC_TARGET,CP,D,SIGMA)
 	SIGMA = SIGMA*exp(F);
 
 	if (SIGMA<= 1e-5)
-		SIGMA = 0.05;
+		SIGMA = 0.01;
 	end
 
   return (SIGMA,AVG_P_SUCC);
@@ -468,10 +421,10 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
 
       # Write parameters to disk ...
       parameter_archive = [parameter_archive parameter_array]
-      writedlm("./parameter_archive.dat.13",parameter_archive);
+      writedlm("./parameter_archive.dat.23",parameter_archive);
 
       error_archive = [error_archive error_array[1]]
-      writedlm("./error_archive.dat.13",error_archive);
+      writedlm("./error_archive.dat.23",error_archive);
 
       # reset the number of failed steps -
       number_of_failed_steps = 0;

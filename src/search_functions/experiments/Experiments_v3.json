@@ -1,0 +1,11 @@
+{
+  "experiment_array":[
+    {
+      "experiment_id":"b5ebeea0-36bf-4834-8016-6c83de7235bd",
+      "data_file":"./search_functions/data/IRF1-WTHL60.txt",
+      "output_index":"46",
+      "protein_symbol":"protein_gene_IRF1",
+      "error_function":"Error"
+    }
+  ]
+}

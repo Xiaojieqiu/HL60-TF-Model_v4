@@ -4,7 +4,7 @@ using PyPlot
 
 # load the error and parameter archives -
 file_suffix_number_array = [10,13]
-top_set_cutoff = 20
+top_set_cutoff = [20,10]
 
 # read from disk -
 parameter_archive = []
@@ -13,8 +13,8 @@ counter = 1
 for file_suffix_index in file_suffix_number_array
 
   # load -
-  raw_error_archive = readdlm("./error_archive.dat."*string(file_suffix_index))
-  raw_parameter_archive = readdlm("./parameter_archive.dat."*string(file_suffix_index))
+  raw_error_archive = readdlm("./raw_ensemble/error_archive.dat."*string(file_suffix_index))
+  raw_parameter_archive = readdlm("./raw_ensemble/parameter_archive.dat."*string(file_suffix_index))
 
   # cut the lead -
   raw_error_archive = raw_error_archive[2:end]
@@ -24,7 +24,7 @@ for file_suffix_index in file_suffix_number_array
   index_sort_error = sortperm(raw_error_archive )
 
   # which sets should we grab?
-  index_of_good_sets = index_sort_error[1:top_set_cutoff]
+  index_of_good_sets = index_sort_error[1:top_set_cutoff[counter]]
 
   # initialize -
   if counter == 1

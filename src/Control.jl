@@ -28,19 +28,19 @@
 # Generated on: 2017-03-09T06:52:55.849
 #
 # Input arguments:
-# t::Float64 => Current time value (scalar) 
-# x::Array{Float64,1} => State array (number_of_species x 1) 
-# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+# t::Float64 => Current time value (scalar)
+# x::Array{Float64,1} => State array (number_of_species x 1)
+# data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 #
 # Output arguments:
-# control_array::Array{Float64,1} => Transcriptional control array (number_of_genes x 1) at time t 
+# control_array::Array{Float64,1} => Transcriptional control array (number_of_genes x 1) at time t
 # ----------------------------------------------------------------------------------- #
 function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractString,Any})
 
-	# initialize the control - 
+	# initialize the control -
 	control_array = zeros(18)
 
-	# Alias the species - 
+	# Alias the species -
 	gene_AP1 = x[1]
 	gene_AhR = x[2]
 	gene_CD11b = x[3]
@@ -96,7 +96,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	protein_gene_Trigger = x[53]
 	protein_gene_cRAF = x[54]
 
-	# Alias the binding parameters - 
+	# Alias the binding parameters -
 	binding_parameter_dictionary = data_dictionary["binding_parameter_dictionary"]
 	n_gene_AP1_gene_AhR = binding_parameter_dictionary["n_gene_AP1_gene_AhR"]
 	K_gene_AP1_gene_AhR = binding_parameter_dictionary["K_gene_AP1_gene_AhR"]
@@ -189,7 +189,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	n_gene_PU1_gene_GFI1 = binding_parameter_dictionary["n_gene_PU1_gene_GFI1"]
 	K_gene_PU1_gene_GFI1 = binding_parameter_dictionary["K_gene_PU1_gene_GFI1"]
 
-	# Alias the control function parameters - 
+	# Alias the control function parameters -
 	control_parameter_dictionary = data_dictionary["control_parameter_dictionary"]
 	W_gene_AP1_RNAP = control_parameter_dictionary["W_gene_AP1_RNAP"]
 	W_gene_AP1_gene_AhR = control_parameter_dictionary["W_gene_AP1_gene_AhR"]
@@ -276,7 +276,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_AP1_gene_PPARg)
 	b_gene_AP1_gene_PPARg = (actor^(n_gene_AP1_gene_PPARg))/(K_gene_AP1_gene_PPARg^(n_gene_AP1_gene_PPARg)+actor^(n_gene_AP1_gene_PPARg))
 
-	# Control function for gene_AP1 - 
+	# Control function for gene_AP1 -
 	control_array[1] = (W_gene_AP1_RNAP+W_gene_AP1_gene_AhR*b_gene_AP1_gene_AhR+W_gene_AP1_gene_PU1*b_gene_AP1_gene_PU1)/(1+W_gene_AP1_RNAP+W_gene_AP1_gene_AhR*b_gene_AP1_gene_AhR+W_gene_AP1_gene_PU1*b_gene_AP1_gene_PU1+W_gene_AP1_gene_PPARg*b_gene_AP1_gene_PPARg)
 
 	# Transfer function target:gene_AhR actor:gene_Trigger
@@ -286,7 +286,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_AhR_gene_Trigger)
 	b_gene_AhR_gene_Trigger = (actor^(n_gene_AhR_gene_Trigger))/(K_gene_AhR_gene_Trigger^(n_gene_AhR_gene_Trigger)+actor^(n_gene_AhR_gene_Trigger))
 
-	# Control function for gene_AhR - 
+	# Control function for gene_AhR -
 	control_array[2] = (W_gene_AhR_RNAP+W_gene_AhR_gene_Trigger*b_gene_AhR_gene_Trigger)/(1+W_gene_AhR_RNAP+W_gene_AhR_gene_Trigger*b_gene_AhR_gene_Trigger)
 
 	# Transfer function target:gene_CD11b actor:gene_PU1_gene_cRAF
@@ -297,7 +297,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_CD11b_gene_PU1_gene_cRAF)
 	b_gene_CD11b_gene_PU1_gene_cRAF = (actor^(n_gene_CD11b_gene_PU1_gene_cRAF))/(K_gene_CD11b_gene_PU1_gene_cRAF^(n_gene_CD11b_gene_PU1_gene_cRAF)+actor^(n_gene_CD11b_gene_PU1_gene_cRAF))
 
-	# Control function for gene_CD11b - 
+	# Control function for gene_CD11b -
 	control_array[3] = (W_gene_CD11b_RNAP+W_gene_CD11b_gene_PU1_gene_cRAF*b_gene_CD11b_gene_PU1_gene_cRAF)/(1+W_gene_CD11b_RNAP+W_gene_CD11b_gene_PU1_gene_cRAF*b_gene_CD11b_gene_PU1_gene_cRAF)
 
 	# Transfer function target:gene_CD14 actor:gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF
@@ -310,7 +310,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF)
 	b_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF = (actor^(n_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF))/(K_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF^(n_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF)+actor^(n_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF))
 
-	# Control function for gene_CD14 - 
+	# Control function for gene_CD14 -
 	control_array[4] = (W_gene_CD14_RNAP+W_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF*b_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF)/(1+W_gene_CD14_RNAP+W_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF*b_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF)
 
 	# Transfer function target:gene_CD38 actor:gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF
@@ -323,7 +323,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF)
 	b_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF = (actor^(n_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF))/(K_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF^(n_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF)+actor^(n_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF))
 
-	# Control function for gene_CD38 - 
+	# Control function for gene_CD38 -
 	control_array[5] = (W_gene_CD38_RNAP+W_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF*b_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF)/(1+W_gene_CD38_RNAP+W_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF*b_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF)
 
 	# Transfer function target:gene_CEBPa actor:gene_Trigger
@@ -354,7 +354,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_CEBPa_gene_GFI1)
 	b_gene_CEBPa_gene_GFI1 = (actor^(n_gene_CEBPa_gene_GFI1))/(K_gene_CEBPa_gene_GFI1^(n_gene_CEBPa_gene_GFI1)+actor^(n_gene_CEBPa_gene_GFI1))
 
-	# Control function for gene_CEBPa - 
+	# Control function for gene_CEBPa -
 	control_array[6] = (W_gene_CEBPa_RNAP+W_gene_CEBPa_gene_Trigger*b_gene_CEBPa_gene_Trigger+W_gene_CEBPa_gene_PPARg*b_gene_CEBPa_gene_PPARg+W_gene_CEBPa_gene_CEBPa*b_gene_CEBPa_gene_CEBPa)/(1+W_gene_CEBPa_RNAP+W_gene_CEBPa_gene_Trigger*b_gene_CEBPa_gene_Trigger+W_gene_CEBPa_gene_PPARg*b_gene_CEBPa_gene_PPARg+W_gene_CEBPa_gene_CEBPa*b_gene_CEBPa_gene_CEBPa+W_gene_CEBPa_gene_GFI1*b_gene_CEBPa_gene_GFI1)
 
 	# Transfer function target:gene_E2F actor:gene_E2F
@@ -392,7 +392,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_E2F_gene_cRAF)
 	b_gene_E2F_gene_cRAF = (actor^(n_gene_E2F_gene_cRAF))/(K_gene_E2F_gene_cRAF^(n_gene_E2F_gene_cRAF)+actor^(n_gene_E2F_gene_cRAF))
 
-	# Control function for gene_E2F - 
+	# Control function for gene_E2F -
 	control_array[7] = (W_gene_E2F_RNAP+W_gene_E2F_gene_E2F*b_gene_E2F_gene_E2F)/(1+W_gene_E2F_RNAP+W_gene_E2F_gene_E2F*b_gene_E2F_gene_E2F+W_gene_E2F_gene_PPARg*b_gene_E2F_gene_PPARg+W_gene_E2F_gene_CEBPa*b_gene_E2F_gene_CEBPa+W_gene_E2F_gene_GFI1*b_gene_E2F_gene_GFI1+W_gene_E2F_gene_cRAF*b_gene_E2F_gene_cRAF)
 
 	# Transfer function target:gene_EGR1 actor:gene_Trigger
@@ -423,7 +423,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_EGR1_gene_GFI1)
 	b_gene_EGR1_gene_GFI1 = (actor^(n_gene_EGR1_gene_GFI1))/(K_gene_EGR1_gene_GFI1^(n_gene_EGR1_gene_GFI1)+actor^(n_gene_EGR1_gene_GFI1))
 
-	# Control function for gene_EGR1 - 
+	# Control function for gene_EGR1 -
 	control_array[8] = (W_gene_EGR1_RNAP+W_gene_EGR1_gene_Trigger*b_gene_EGR1_gene_Trigger+W_gene_EGR1_gene_PU1*b_gene_EGR1_gene_PU1)/(1+W_gene_EGR1_RNAP+W_gene_EGR1_gene_Trigger*b_gene_EGR1_gene_Trigger+W_gene_EGR1_gene_PU1*b_gene_EGR1_gene_PU1+W_gene_EGR1_gene_PPARg*b_gene_EGR1_gene_PPARg+W_gene_EGR1_gene_GFI1*b_gene_EGR1_gene_GFI1)
 
 	# Transfer function target:gene_GFI1 actor:gene_CEBPa
@@ -440,7 +440,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_GFI1_gene_EGR1)
 	b_gene_GFI1_gene_EGR1 = (actor^(n_gene_GFI1_gene_EGR1))/(K_gene_GFI1_gene_EGR1^(n_gene_GFI1_gene_EGR1)+actor^(n_gene_GFI1_gene_EGR1))
 
-	# Control function for gene_GFI1 - 
+	# Control function for gene_GFI1 -
 	control_array[9] = (W_gene_GFI1_RNAP+W_gene_GFI1_gene_CEBPa*b_gene_GFI1_gene_CEBPa)/(1+W_gene_GFI1_RNAP+W_gene_GFI1_gene_CEBPa*b_gene_GFI1_gene_CEBPa+W_gene_GFI1_gene_EGR1*b_gene_GFI1_gene_EGR1)
 
 	# Transfer function target:gene_IRF1 actor:gene_Trigger
@@ -464,7 +464,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_IRF1_gene_PPARg)
 	b_gene_IRF1_gene_PPARg = (actor^(n_gene_IRF1_gene_PPARg))/(K_gene_IRF1_gene_PPARg^(n_gene_IRF1_gene_PPARg)+actor^(n_gene_IRF1_gene_PPARg))
 
-	# Control function for gene_IRF1 - 
+	# Control function for gene_IRF1 -
 	control_array[10] = (W_gene_IRF1_RNAP+W_gene_IRF1_gene_Trigger*b_gene_IRF1_gene_Trigger+W_gene_IRF1_gene_AhR*b_gene_IRF1_gene_AhR+W_gene_IRF1_gene_PPARg*b_gene_IRF1_gene_PPARg)/(1+W_gene_IRF1_RNAP+W_gene_IRF1_gene_Trigger*b_gene_IRF1_gene_Trigger+W_gene_IRF1_gene_AhR*b_gene_IRF1_gene_AhR+W_gene_IRF1_gene_PPARg*b_gene_IRF1_gene_PPARg)
 
 	# Transfer function target:gene_OCT1 actor:gene_PPARg
@@ -474,7 +474,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_OCT1_gene_PPARg)
 	b_gene_OCT1_gene_PPARg = (actor^(n_gene_OCT1_gene_PPARg))/(K_gene_OCT1_gene_PPARg^(n_gene_OCT1_gene_PPARg)+actor^(n_gene_OCT1_gene_PPARg))
 
-	# Control function for gene_OCT1 - 
+	# Control function for gene_OCT1 -
 	control_array[11] = (W_gene_OCT1_RNAP+W_gene_OCT1_gene_PPARg*b_gene_OCT1_gene_PPARg)/(1+W_gene_OCT1_RNAP+W_gene_OCT1_gene_PPARg*b_gene_OCT1_gene_PPARg)
 
 	# Transfer function target:gene_OCT4 actor:gene_Trigger
@@ -498,7 +498,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_OCT4_gene_cRAF)
 	b_gene_OCT4_gene_cRAF = (actor^(n_gene_OCT4_gene_cRAF))/(K_gene_OCT4_gene_cRAF^(n_gene_OCT4_gene_cRAF)+actor^(n_gene_OCT4_gene_cRAF))
 
-	# Control function for gene_OCT4 - 
+	# Control function for gene_OCT4 -
 	control_array[12] = (W_gene_OCT4_RNAP)/(1+W_gene_OCT4_RNAP+W_gene_OCT4_gene_Trigger*b_gene_OCT4_gene_Trigger+W_gene_OCT4_gene_AhR*b_gene_OCT4_gene_AhR+W_gene_OCT4_gene_cRAF*b_gene_OCT4_gene_cRAF)
 
 	# Transfer function target:gene_P21 actor:gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF
@@ -521,7 +521,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_P21_gene_GFI1)
 	b_gene_P21_gene_GFI1 = (actor^(n_gene_P21_gene_GFI1))/(K_gene_P21_gene_GFI1^(n_gene_P21_gene_GFI1)+actor^(n_gene_P21_gene_GFI1))
 
-	# Control function for gene_P21 - 
+	# Control function for gene_P21 -
 	control_array[13] = (W_gene_P21_RNAP+W_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF*b_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF)/(1+W_gene_P21_RNAP+W_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF*b_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF+W_gene_P21_gene_GFI1*b_gene_P21_gene_GFI1)
 
 	# Transfer function target:gene_P47Phox actor:gene_PU1_gene_CEBPa_gene_cRAF
@@ -540,7 +540,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_P47Phox_gene_PPARg)
 	b_gene_P47Phox_gene_PPARg = (actor^(n_gene_P47Phox_gene_PPARg))/(K_gene_P47Phox_gene_PPARg^(n_gene_P47Phox_gene_PPARg)+actor^(n_gene_P47Phox_gene_PPARg))
 
-	# Control function for gene_P47Phox - 
+	# Control function for gene_P47Phox -
 	control_array[14] = (W_gene_P47Phox_RNAP+W_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF*b_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF)/(1+W_gene_P47Phox_RNAP+W_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF*b_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF+W_gene_P47Phox_gene_PPARg*b_gene_P47Phox_gene_PPARg)
 
 	# Transfer function target:gene_PPARg actor:gene_Trigger
@@ -578,7 +578,7 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_PPARg_gene_AP1)
 	b_gene_PPARg_gene_AP1 = (actor^(n_gene_PPARg_gene_AP1))/(K_gene_PPARg_gene_AP1^(n_gene_PPARg_gene_AP1)+actor^(n_gene_PPARg_gene_AP1))
 
-	# Control function for gene_PPARg - 
+	# Control function for gene_PPARg -
 	control_array[15] = (W_gene_PPARg_RNAP+W_gene_PPARg_gene_Trigger*b_gene_PPARg_gene_Trigger+W_gene_PPARg_gene_CEBPa*b_gene_PPARg_gene_CEBPa+W_gene_PPARg_gene_EGR1*b_gene_PPARg_gene_EGR1)/(1+W_gene_PPARg_RNAP+W_gene_PPARg_gene_Trigger*b_gene_PPARg_gene_Trigger+W_gene_PPARg_gene_CEBPa*b_gene_PPARg_gene_CEBPa+W_gene_PPARg_gene_EGR1*b_gene_PPARg_gene_EGR1+W_gene_PPARg_gene_PU1*b_gene_PPARg_gene_PU1+W_gene_PPARg_gene_AP1*b_gene_PPARg_gene_AP1)
 
 	# Transfer function target:gene_PU1 actor:gene_Trigger
@@ -630,15 +630,15 @@ function Control(t::Float64,x::Array{Float64,1},data_dictionary::Dict{AbstractSt
 	actor = prod(actor_set_gene_PU1_gene_GFI1)
 	b_gene_PU1_gene_GFI1 = (actor^(n_gene_PU1_gene_GFI1))/(K_gene_PU1_gene_GFI1^(n_gene_PU1_gene_GFI1)+actor^(n_gene_PU1_gene_GFI1))
 
-	# Control function for gene_PU1 - 
+	# Control function for gene_PU1 -
 	control_array[16] = (W_gene_PU1_RNAP+W_gene_PU1_gene_Trigger*b_gene_PU1_gene_Trigger+W_gene_PU1_gene_CEBPa*b_gene_PU1_gene_CEBPa+W_gene_PU1_gene_PU1*b_gene_PU1_gene_PU1+W_gene_PU1_gene_AP1*b_gene_PU1_gene_AP1+W_gene_PU1_gene_OCT1*b_gene_PU1_gene_OCT1)/(1+W_gene_PU1_RNAP+W_gene_PU1_gene_Trigger*b_gene_PU1_gene_Trigger+W_gene_PU1_gene_CEBPa*b_gene_PU1_gene_CEBPa+W_gene_PU1_gene_PU1*b_gene_PU1_gene_PU1+W_gene_PU1_gene_AP1*b_gene_PU1_gene_AP1+W_gene_PU1_gene_OCT1*b_gene_PU1_gene_OCT1+W_gene_PU1_gene_AhR*b_gene_PU1_gene_AhR+W_gene_PU1_gene_GFI1*b_gene_PU1_gene_GFI1)
 
-	# Control function for gene_Trigger - 
+	# Control function for gene_Trigger -
 	control_array[17] = (W_gene_Trigger_RNAP)/(1+W_gene_Trigger_RNAP)
 
-	# Control function for gene_cRAF - 
+	# Control function for gene_cRAF -
 	control_array[18] = (W_gene_cRAF_RNAP)/(1+W_gene_cRAF_RNAP)
 
-	# return - 
+	# return -
 	return control_array
 end

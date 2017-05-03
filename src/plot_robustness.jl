@@ -69,7 +69,7 @@ for col_index = 1:number_of_cols
                patches.Circle(origin_point,   # (x,y)
                    radius = circle_radius,          # radius
                    facecolor=color_value,
-                   edgecolor="black",
+                   edgecolor=color_value,
                    linewidth=0.5,
                )
            )
@@ -107,7 +107,7 @@ for col_index = 1:1
                patches.Circle(origin_point,   # (x,y)
                    radius = circle_radius,       # radius
                    facecolor=color_value,
-                   edgecolor="grey",
+                   edgecolor=color_value,
                    linewidth=0.5,
                )
            )

@@ -1,0 +1,18 @@
+{
+  "experiment_array":[
+    {
+      "experiment_id":"5033f6ac-4394-11e6-beb8-9e71128cae77",
+      "data_file":"./search_functions/data/CD38-WTHL60.txt",
+      "output_index":"41",
+      "protein_symbol":"protein_gene_CD38",
+      "error_function":"Error"
+    },
+    {
+      "experiment_id":"5033f83c-4394-11e6-beb8-9e71128cae77",
+      "data_file":"./search_functions/data/CD11b-WTHL60.txt",
+      "output_index":"39",
+      "protein_symbol":"protein_gene_CD11b",
+      "error_function":"Error"
+    }
+  ]
+}

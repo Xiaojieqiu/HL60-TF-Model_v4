@@ -12,8 +12,11 @@ function simulate_pairwise_gene_knockout(time_start,time_stop,time_step,gene_i_i
   # solve the model equations -
   (TP,XP) = add_atra_simulation(time_start,time_stop,time_step_size,copy_data_dictionary);
 
-  # calculate the differnce -
-  return norm((XP-XN))
+  # compute a scale factor -
+  SF = norm(XN)
+
+  # calculate the scaled differnce -
+  return (1/SF)*norm((XP-XN))
 end
 
 function simulate_pairwise_connection_knockout(time_start,time_stop,time_step,connection_symbol_i,connection_symbol_j,data_dictionary)
@@ -30,6 +33,9 @@ function simulate_pairwise_connection_knockout(time_start,time_stop,time_step,co
   # solve the model equations -
   (TP,XP) = add_atra_simulation(time_start,time_stop,time_step_size,copy_data_dictionary);
 
-  # calculate the differnce -
-  return norm((XP-XN))
+  # compute a scale factor -
+  SF = norm(XN)
+
+  # calculate the scaled differnce -
+  return (1/SF)*norm((XP-XN))
 end

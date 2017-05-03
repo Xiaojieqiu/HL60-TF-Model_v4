@@ -65,11 +65,13 @@ function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dicti
 	average_transcript_length = data_dictionary["average_transcript_length"]
 	gene_coding_length_array = data_dictionary["gene_coding_length_array"]
 
+	beta = 1.0
+
 	# Populate the transcription rate array -
 	# Gene: gene_AP1
 	gene_length = gene_coding_length_array[1]
 	scale_factor = (average_transcript_length/gene_length)
-	transcription_rate_array[1] = scale_factor*kcat_transcription*(rnapII_concentration)*((gene_AP1)/(KSAT+gene_AP1))
+	transcription_rate_array[1] = beta*scale_factor*kcat_transcription*(rnapII_concentration)*((gene_AP1)/(KSAT+gene_AP1))
 
 	# Gene: gene_AhR
 	gene_length = gene_coding_length_array[2]
@@ -139,7 +141,7 @@ function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dicti
 	# Gene: gene_PPARg
 	gene_length = gene_coding_length_array[15]
 	scale_factor = (average_transcript_length/gene_length)
-	transcription_rate_array[15] = scale_factor*kcat_transcription*(rnapII_concentration)*((gene_PPARg)/(KSAT+gene_PPARg))
+	transcription_rate_array[15] = beta*scale_factor*kcat_transcription*(rnapII_concentration)*((gene_PPARg)/(KSAT+gene_PPARg))
 
 	# Gene: gene_PU1
 	gene_length = gene_coding_length_array[16]
@@ -155,7 +157,6 @@ function calculate_transcription_rates(t::Float64,x::Array{Float64,1},data_dicti
 	gene_length = gene_coding_length_array[18]
 	scale_factor = (average_transcript_length/gene_length)
 	transcription_rate_array[18] = scale_factor*kcat_transcription*(rnapII_concentration)*((gene_cRAF)/(KSAT+gene_cRAF))
-
 
 	# return transcription_rate_array -
 	return transcription_rate_array
@@ -313,6 +314,7 @@ function calculate_translation_rates(t::Float64,x::Array{Float64,1},data_diction
 	scale_factor = (average_protein_length/protein_length)
 	translation_rate_array[18] = scale_factor*kcat_translation*(ribosome_concentration)*((mRNA_gene_cRAF)/(KSAT+mRNA_gene_cRAF))
 
+	#@show translation_rate_array
 
 	# return translation array -
 	return translation_rate_array

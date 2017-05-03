@@ -10,32 +10,80 @@ time_step_size = 0.01
 data_dictionary = DataDictionary(time_start,time_stop,time_step_size)
 
 # get my initial parameter guess from the previous run -
-par_array = readdlm("parameter_ensemble.dat")
+par_array = readdlm("randomized_parameter_ensemble.dat")
 
 # how many ensemble members do we have?
 (number_of_rows,number_of_samples) = size(par_array)
 
 # which parameters do we want to KO -
 list_of_ko_parameters = [
-
-  "W_gene_AP1_gene_PU1" ; # 1
-  "W_gene_CD11b_gene_PU1_gene_cRAF" ; # 2
-  "W_gene_EGR1_gene_PU1"  ; # 3
-  "W_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF" ; # 4
-  "W_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF"  ; # 5
-  "W_gene_PPARg_gene_PU1" ; # 6
-  "W_gene_PU1_gene_PU1" ; # 7
-  "W_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF" ; # 8
-  "W_gene_PPARg_gene_AP1" ; # 9
-  "W_gene_PU1_gene_AP1" ; # 10
+  "W_gene_AP1_RNAP"	;	# 91
+  "W_gene_AP1_gene_AhR"	;	# 92
+  "W_gene_AP1_gene_PU1"	;	# 93
+  "W_gene_AP1_gene_PPARg"	;	# 94
+  "W_gene_AhR_RNAP"	;	# 95
+  "W_gene_AhR_gene_Trigger"	;	# 96
+  "W_gene_CD11b_RNAP"	;	# 97
+  "W_gene_CD11b_gene_PU1_gene_cRAF"	;	# 98
+  "W_gene_CD14_RNAP"	;	# 99
+  "W_gene_CD14_gene_PPARg_gene_CEBPa_gene_EGR1_gene_cRAF"	;	# 100
+  "W_gene_CD38_RNAP"	;	# 101
+  "W_gene_CD38_gene_IRF1_gene_PPARg_gene_Trigger_gene_cRAF"	;	# 102
+  "W_gene_CEBPa_RNAP"	;	# 103
+  "W_gene_CEBPa_gene_Trigger"	;	# 104
+  "W_gene_CEBPa_gene_PPARg"	;	# 105
+  "W_gene_CEBPa_gene_CEBPa"	;	# 106
+  "W_gene_CEBPa_gene_GFI1"	;	# 107
+  "W_gene_E2F_RNAP"	;	# 108
+  "W_gene_E2F_gene_E2F"	;	# 109
+  "W_gene_E2F_gene_PPARg"	;	# 110
+  "W_gene_E2F_gene_CEBPa"	;	# 111
+  "W_gene_E2F_gene_GFI1"	;	# 112
+  "W_gene_E2F_gene_cRAF"	;	# 113
+  "W_gene_EGR1_RNAP"	;	# 114
+  "W_gene_EGR1_gene_Trigger"	;	# 115
+  "W_gene_EGR1_gene_PU1"	;	# 116
+  "W_gene_EGR1_gene_PPARg"	;	# 117
+  "W_gene_EGR1_gene_GFI1"	;	# 118
+  "W_gene_GFI1_RNAP"	;	# 119
+  "W_gene_GFI1_gene_CEBPa"	;	# 120
+  "W_gene_GFI1_gene_EGR1"	;	# 121
+  "W_gene_IRF1_RNAP"	;	# 122
+  "W_gene_IRF1_gene_Trigger"	;	# 123
+  "W_gene_IRF1_gene_AhR"	;	# 124
+  "W_gene_IRF1_gene_PPARg"	;	# 125
+  "W_gene_OCT1_RNAP"	;	# 126
+  "W_gene_OCT1_gene_PPARg"	;	# 127
+  "W_gene_OCT4_RNAP"	;	# 128
+  "W_gene_OCT4_gene_Trigger"	;	# 129
+  "W_gene_OCT4_gene_AhR"	;	# 130
+  "W_gene_OCT4_gene_cRAF"	;	# 131
+  "W_gene_P21_RNAP"	;	# 132
+  "W_gene_P21_gene_Trigger_gene_AP1_gene_PPARg_gene_PU1_gene_IRF1_gene_CEBPa_gene_cRAF"	;	# 133
+  "W_gene_P21_gene_GFI1"	;	# 134
+  "W_gene_P47Phox_RNAP"	;	# 135
+  "W_gene_P47Phox_gene_PU1_gene_CEBPa_gene_cRAF"	;	# 136
+  "W_gene_P47Phox_gene_PPARg"	;	# 137
+  "W_gene_PPARg_RNAP"	;	# 138
+  "W_gene_PPARg_gene_Trigger"	;	# 139
+  "W_gene_PPARg_gene_CEBPa"	;	# 140
+  "W_gene_PPARg_gene_EGR1"	;	# 141
+  "W_gene_PPARg_gene_PU1"	;	# 142
+  "W_gene_PPARg_gene_AP1"	;	# 143
+  "W_gene_PU1_RNAP"	;	# 144
+  "W_gene_PU1_gene_Trigger"	;	# 145
+  "W_gene_PU1_gene_CEBPa"	;	# 146
+  "W_gene_PU1_gene_PU1"	;	# 147
+  "W_gene_PU1_gene_AP1"	;	# 148
+  "W_gene_PU1_gene_OCT1"	;	# 149
+  "W_gene_PU1_gene_AhR"	;	# 150
+  "W_gene_PU1_gene_GFI1"	;	# 151
 ];
-
-
 
 number_of_ko_connection_parameters = length(list_of_ko_parameters)
 
 # main loop -
-for outer_sample_index = 1:10
+for outer_sample_index = 1:number_of_samples
 
   # what parameters are we looking at?
   parameter_set = par_array[:,outer_sample_index]

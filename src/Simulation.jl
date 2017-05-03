@@ -1,4 +1,4 @@
-function add_atra_simulation(time_start,time_stop,time_step,data_dictionary)
+function add_atra_simulation(time_start,time_stop,time_step_size,data_dictionary)
 
   # Run the model to steady-state -
   steady_state_array = estimate_steady_state(0.01,data_dictionary);
@@ -20,7 +20,7 @@ function add_atra_simulation(time_start,time_stop,time_step,data_dictionary)
 
 end
 
-function add_atra_adj_simulation(time_start,time_stop,time_step,parameter_index,data_dictionary)
+function add_atra_adj_simulation(time_start,time_stop,time_step_size,parameter_index,data_dictionary)
 
   # Run the model to steady-state -
   steady_state_array = estimate_steady_state(0.01,data_dictionary);

@@ -76,6 +76,27 @@
       "output_index":"38",
       "protein_symbol":"protein_gene_AhR",
       "error_function":"Error"
+    },
+    {
+      "experiment_id":"3b4a7af8-c00f-44f9-91c4-f540bd7bd13b",
+      "data_file":"./search_functions/data/E2F-WTHL60-Synthetic.txt",
+      "output_index":"43",
+      "protein_symbol":"protein_gene_E2F",
+      "error_function":"Error"
+    },
+    {
+      "experiment_id":"f91dd0b8-0321-448e-95f4-7f4e527bcd42",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"37",
+      "protein_symbol":"protein_gene_AP1",
+      "error_function":"ErrorUnmeasured"
+    },
+    {
+      "experiment_id":"cda1fcb4-0d6e-4e1c-945c-0cddeeb438d0",
+      "data_file":"./search_functions/data/Unmeasured.txt",
+      "output_index":"51",
+      "protein_symbol":"protein_gene_PPARg",
+      "error_function":"ErrorUnmeasured"
     }
   ]
 }

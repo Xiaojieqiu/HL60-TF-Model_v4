@@ -48,7 +48,7 @@ local_index = 1
 for species_name in species_name_array
 
   simulation_data_array[local_index,1] = simulation_data_dictionary[species_name][2,1]
-  simulation_data_array[local_index,2] = (1/sqrt(10))*simulation_data_dictionary[species_name][2,2]
+  simulation_data_array[local_index,2] = (1/sqrt(3))*simulation_data_dictionary[species_name][2,2]
   local_index = local_index + 1
 end
 
@@ -74,3 +74,6 @@ for species_name in species_name_array
   local_index = local_index + 1
 end
 ax[:bar](ind+width, experiment_data_array[:,1], width, color=measured_color,yerr=experiment_data_array[:,2],error_kw=error_bar_dictionary)
+
+# write -
+savefig("./raw_figs/SimBar-Raw.pdf")

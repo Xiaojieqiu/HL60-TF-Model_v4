@@ -111,6 +111,7 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 		648	;	# 54	18	protein_gene_cRAF --https://www.ncbi.nlm.nih.gov/protein/NP_002871.1
 	]
 
+
 	# ------------------------------------------------------------------------------------------#
 	# constants (from bionumbers)       units
 	# ------------------------------------------------------------------------------------------#
@@ -121,9 +122,9 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 	protein_half_life = 10              # hrs
 	doubling_time_cell = 19.5           # hrs
 	max_translation_rate = 5            # aa/sec
-	max_transcription_rate = 60.0        # nt/sec
-	average_transcript_length = 15000   # nt
-	average_protein_length = 5000       # aa
+	max_transcription_rate = 60.0       # nt/sec
+	average_transcript_length = 44192   # nt
+	average_protein_length = 458       	# aa
 	fraction_nucleus = 0.49             # dimensionless
 	av_number = 6.02e23                 # number/mol
 	avg_gene_number = 2                 # number of copies of a gene
@@ -571,8 +572,8 @@ function DataDictionary(time_start::Float64,time_stop::Float64,time_step_size::F
 	background_copy_number_dictionary = Dict{AbstractString,Float64}()
 	background_copy_number_dictionary["protein_gene_AP1"] = 100.0
 	background_copy_number_dictionary["protein_gene_AhR"] = 100.0
-	background_copy_number_dictionary["protein_gene_CD11b"] = 0.0
-	background_copy_number_dictionary["protein_gene_CD14"] = 100.0
+	background_copy_number_dictionary["protein_gene_CD11b"] = 100.0
+	background_copy_number_dictionary["protein_gene_CD14"] = 0.0
 	background_copy_number_dictionary["protein_gene_CD38"] = 100.0
 	background_copy_number_dictionary["protein_gene_CEBPa"] = 100.0
 	background_copy_number_dictionary["protein_gene_E2F"] = 10000.0

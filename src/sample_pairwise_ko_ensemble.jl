@@ -10,7 +10,7 @@ time_step_size = 0.01
 data_dictionary = DataDictionary(time_start,time_stop,time_step_size)
 
 # get my initial parameter guess from the previous run -
-par_array = readdlm("parameter_ensemble.dat")
+par_array = readdlm("randomized_parameter_ensemble.dat")
 
 # how many ensemble members do we have?
 (number_of_rows,number_of_samples) = size(par_array)

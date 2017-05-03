@@ -31,7 +31,7 @@ end
 state_archive = state_archive[:,2:end]
 mean_state = mean(state_archive,2)
 std_state = std(state_archive,2)
-SF = 2.58
+SF = 1.96
 state_lower_bound = mean_state - SF*std_state
 state_upper_bound = mean_state + SF*std_state
 

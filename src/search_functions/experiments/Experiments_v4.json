@@ -1,0 +1,11 @@
+{
+  "experiment_array":[
+    {
+      "experiment_id":"3b4a7af8-c00f-44f9-91c4-f540bd7bd13b",
+      "data_file":"./search_functions/data/E2F-WTHL60-Synthetic.txt",
+      "output_index":"43",
+      "protein_symbol":"protein_gene_E2F",
+      "error_function":"Error"
+    }
+  ]
+}

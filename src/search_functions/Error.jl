@@ -1,3 +1,26 @@
+function ErrorUnmeasured(experimental_data_array,simulation_time_array,simulation_state_array,output_index,species_symbol,data_dictionary)
+
+  # initialize -
+  total_error_value = Inf
+
+  # Interpole the simulation data to the experimental time scale -
+  interpolated_simulated_trajectory = np.interp(experimental_data_array[:,1],simulation_time_array,simulation_state_array[:,output_index]);
+
+  # Compute the initial value term -
+  background_copy_number_dictionary = data_dictionary["background_copy_number_dictionary"];
+  background_copy_number = background_copy_number_dictionary[species_symbol]
+  cell_volume = data_dictionary["cell_volume"];
+  av_number = data_dictionary["av_number"];
+  initial_concentration = background_copy_number*(1/av_number)*(1/cell_volume)*1e9; # nM
+  initial_value_term = ((interpolated_simulated_trajectory[1] - initial_concentration)^2);
+
+  # compute the total error -
+  total_error_value = initial_value_term;
+
+  # return -
+  return total_error_value
+end
+
 function Error(experimental_data_array,simulation_time_array,simulation_state_array,output_index,species_symbol,data_dictionary)
 
   # initialize -
