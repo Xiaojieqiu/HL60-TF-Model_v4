@@ -51,4 +51,3 @@ Argument | Type | Description
 ``data_dictionary`` | [Julia dictionary](http://docs.julialang.org/en/stable/stdlib/collections/?highlight=dict#Base.Dict) | Instance of the data dictionary structure created by the ``DataDictionary`` function
 ``T`` | [array](http://docs.julialang.org/en/stable/stdlib/arrays/?highlight=array) (``number_of_steps x 1``) | Output time array (``time_state:time_step:time_stop``)
 ``X`` |[array](http://docs.julialang.org/en/stable/stdlib/arrays/?highlight=array) (``number_of_steps x (2*number_of_states)``) | Output state array (solution of the adjoint model equations). The first number of states is the model solution, while the second state block is the sensitivity of the state with respect to the parameter index
-# HL60-TF-Model_v4
