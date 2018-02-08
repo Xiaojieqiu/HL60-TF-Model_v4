@@ -1,5 +1,8 @@
-## Gene regulatory network (GRN) model ##
-This repository contains the model code for an effective GRN model implemented in the [Julia](http://julialang.org) programming language.
+## Gene regulatory network (GRN) model for ATRA differentiation ##
+This repository contains the model code for an effective GRN model for ATRA-induced HL-60 differentiation implemented in the [Julia](http://julialang.org) programming language. The model is described in the publication:
+
+[Tasseff et al (2017) An Effective Model of the Retinoic Acid Induced HL-60 Differentiation Program. Sci Reports, 7,
+Article number: 14327 doi:10.1038/s41598-017-14523-5](https://www.nature.com/articles/s41598-017-14523-5)
 
 ### Installation and Requirements
 You can download this repository as a zip file, or `clone`/`pull` it by using the command (from the command-line):
