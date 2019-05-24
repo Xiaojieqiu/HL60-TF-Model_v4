@@ -34,7 +34,7 @@ time_step_size = 0.01
 data_dictionary = DataDictionary(time_start,time_stop,time_step_size)
 
 # get my initial parameter guess from the previous run -
-par_array = readdlm("parameter_archive.dat.23")
+par_array = readdlm("./raw_ensemble/parameter_archive.dat.23")
 parameter_set = par_array[:,end]
 
 # make a copy of the data dictionary -

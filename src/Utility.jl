@@ -435,7 +435,8 @@ function calculate_bmatrix_row(time,state_array,balance_index,data_dictionary)
   end
 
   # Create the diag array -
-  diag_delta_array = diagm(vec(parameter_delta_array))
+  diag_delta_array = Matrix(Diagonal(parameter_delta_array))
+  #diag_delta_array = diagm(vec(parameter_delta_array))
 
   # Create bVec -
   f_nominal = Balances(time,vec(state_array),data_dictionary)

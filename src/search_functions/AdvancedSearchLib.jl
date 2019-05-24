@@ -422,10 +422,12 @@ function estimate_parameters(pObjectiveFunction,initial_parameter_array,data_dic
 
       # Write parameters to disk ...
       parameter_archive = [parameter_archive parameter_array]
+      #writedlm("./raw_ensemble/parameter_archive.dat.23",parameter_archive);
       writedlm("./parameter_archive.dat.23",parameter_archive);
 
       error_archive = [error_archive error_array[1]]
       writedlm("./error_archive.dat.23",error_archive);
+      #writedlm("./error_archive.dat.23",error_archive);
 
       # reset the number of failed steps -
       number_of_failed_steps = 0;
