@@ -68,7 +68,7 @@ function Error_E2F(experimental_data_array,simulation_time_array,simulation_stat
   interpolated_simulated_trajectory = np.interp(experimental_data_array[:,1],simulation_time_array,simulation_state_array[:,output_index]);
 
   # Compute G1G0 -
-  simulated_G1G0 = 1./interpolated_simulated_trajectory;
+  simulated_G1G0 = 1 ./interpolated_simulated_trajectory;
 
   # Compute the shape term -
   scaled_data_array = alpha_scaling(experimental_data_array[:,2]);

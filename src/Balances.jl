@@ -81,8 +81,8 @@ function Balances(t,x,data_dictionary)
   # @show t
 
   # correct for negatives -
-  idx_small = find(x.<0)
-  x[idx_small] = 0.0
+  idx_small = findall(x.<0)
+  x[idx_small] .= 0.0
 
   # Get model matricies and other required data from the data_dictionary -
   stoichiometric_matrix = data_dictionary["stoichiometric_matrix"]

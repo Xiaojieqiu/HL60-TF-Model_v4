@@ -65,8 +65,8 @@ function SolveAdjBalances(TSTART,TSTOP,Ts,parameter_index,data_dictionary)
   end
 
   # # Check for smalls -
-  idx_n = find(abs(X).<epsilon)
-  X[idx_n] = 0.0
+  idx_n = findall(abs(X).<epsilon)
+  X[idx_n] .= 0.0
 
   # return time and state -
   return (t,X);
@@ -109,8 +109,8 @@ function SolveBalances(TSTART,TSTOP,Ts,data_dictionary)
   end
 
   # Check for negatives -
-  idx_n = find(X.<0)
-  X[idx_n] = 0.0
+  idx_n = findall(X.<0)
+  X[idx_n] .= 0.0
 
   # return time and state -
   return (t,X);

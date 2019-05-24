@@ -398,8 +398,8 @@ end
 function calculate_bmatrix_row(time,state_array,balance_index,data_dictionary)
 
   # define some constants -
-  const epsilon = 1e-6
-  const delta = 0.01
+  epsilon = 1e-6 #const epsilon = 1e-6
+  delta = 0.01   #const delta = 0.01
 
   # parameter name dictionary -
   parameter_name_mapping_array = data_dictionary["parameter_name_mapping_array"]
@@ -496,8 +496,8 @@ end
 function finite_diff_jacobian(time,state_array,data_dictionary)
 
   # define some constants -
-  const epsilon = 1e-6
-  const delta = 0.05
+  epsilon = 1e-6 #const epsilon = 1e-6
+  delta = 0.05  #const delta = 0.05
   number_of_states = length(state_array)
 
   # initialize -
@@ -541,8 +541,8 @@ end
 function calculate_jacobian_row(time,state_array,balance_index,data_dictionary)
 
   # define some constants -
-  const epsilon = 1e-6
-  const delta = 0.001
+  epsilon = 1e-6  #const epsilon = 1e-6
+  delta = 0.001   #const delta = 0.001
   number_of_states = length(state_array)
 
   # Create the delta state array -
@@ -661,7 +661,8 @@ function estimate_steady_state(epsilon,data_dictionary)
   return XSS;
 end
 
-function trapz{Tx<:Number, Ty<:Number}(x::Vector{Tx}, y::Vector{Ty})
+function trapz(x::Vector{Tx}, y::Vector{Ty}) where {Tx <: Number, Ty <: Number}
+# function trapz{Tx<:Number, Ty<:Number}(x::Vector{Tx}, y::Vector{Ty})
     # Trapezoidal integration rule
     local n = length(x)
     if (length(y) != n)

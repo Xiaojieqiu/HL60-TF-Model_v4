@@ -30,7 +30,8 @@ for (experiment_index,experiment_dictionary) in enumerate(experiment_array)
   experiment_id = experiment_dictionary["experiment_id"]
 
   # Grab the error functions from the experiment_dictionary -
-  error_function = eval(parse(experiment_dictionary["error_function"]))
+  error_function = eval(Meta.parse(experiment_dictionary["error_function"]))
+ # error_function = eval(parse(experiment_dictionary["error_function"]))
 
   # cache these functions -
   cached_error_function_dictionary[experiment_id] = error_function
